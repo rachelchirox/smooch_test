@@ -12,9 +12,9 @@ const jsonwebtoken = require('jsonwebtoken');
 
 const jwt = jsonwebtoken.sign({
     scope: 'app'
-}, process.env.SMOOCH_SECRET, {
+}, "yALmS9bSdH9IZf5Hw4TArSTt54k_IqXKrivTraNxbZQPagGoKrhqq5hCpAPY-Md8OXpMnUhB8EzHXEG0blzoBw", {
     headers: {
-        kid: process.env.SMOOCH_KEY_ID,
+        kid: "app_5c4d91c9c74c040023423c98",
         typ: 'JWT',
         alg: 'HS256'
     }

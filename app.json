@@ -6,17 +6,8 @@
   "repository": "https://github.com/smooch/smooch-bot-example",
   "logo": "https://node-js-sample.herokuapp.com/node.png",
   "env": {
-    "SMOOCH_APP_TOKEN": {
-      "description": "Your Smooch app token which is used to initialize the web widget.",
-      "required": true
-    },
-    "SMOOCH_KEY_ID": {
-      "description": "Your Smooch key ID, used to talk to the Smooch API",
-      "required": true
-    },
-    "SMOOCH_SECRET": {
-      "description": "Your Smooch secret, used to talk to the Smooch API",
-      "required": true
-    }
+    "SMOOCH_APP_TOKEN": "5c46da91005ceb0028febd3d",
+    "SMOOCH_KEY_ID": "app_5c4d91c9c74c040023423c98",
+    "SMOOCH_SECRET": "yALmS9bSdH9IZf5Hw4TArSTt54k_IqXKrivTraNxbZQPagGoKrhqq5hCpAPY-Md8OXpMnUhB8EzHXEG0blzoBw"
   }
 }

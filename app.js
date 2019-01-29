@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
     res.render('index', {
-        appToken: process.env.SMOOCH_APP_TOKEN
+        appToken: "5c46da91005ceb0028febd3d"
     });
 });
 

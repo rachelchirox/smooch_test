@@ -49,7 +49,7 @@ function updateWebhook(smoochCore, existingWebhook) {
 if (process.env.SERVICE_URL) {
     const target = process.env.SERVICE_URL.replace(/\/$/, '') + '/webhook';
     const smoochCore = new SmoochCore({
-        jwt
+        jwt: jwt,
     });
     smoochCore.webhooks.list()
         .then((res) => {
