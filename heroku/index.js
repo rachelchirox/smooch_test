@@ -236,7 +236,8 @@ app.post('/webhook', function(req, res, next) {
 
     switch (trigger) {
         case 'message:appUser':
-            console.log('webhook.message:appUser');
+            //console.log('webhook.message:appUser' + );
+            console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
             handleMessages(req, res);
             break;
 
