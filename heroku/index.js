@@ -45,29 +45,141 @@ function updateWebhook(smoochCore, existingWebhook) {
         });
 }
 
+
+
+// smoochCore.appUsers.getMessages({
+//     appId: '5c46da91005ceb0028febd3d',
+//     userId: 'c7f6e6d6c3a637261bd9656f',
+//     query: {
+//         before: 1471995721
+//     }
+// }).then((response) => {
+//     // async code
+// });
+
+const userId = '4ed84fd1e09e909c165133c9';
+
 // Create a webhook if one doesn't already exist
-if (process.env.SERVICE_URL) {
-    const target = process.env.SERVICE_URL.replace(/\/$/, '') + '/webhook';
+//if (process.env.SERVICE_URL) {
+    const target = "tt";//process.env.SERVICE_URL.replace(/\/$/, '') + '/webhook';
     const smoochCore = new SmoochCore({
         jwt: jwt,
     });
+
     smoochCore.webhooks.list()
         .then((res) => {
-            const existingWebhook = res.webhooks.find((w) => w.target === target);
+            // const existingWebhook = res.webhooks.find((w) => w.target === target);
+            //
+            // if (!existingWebhook) {
+            //     return createWebhook(smoochCore, target);
+            // }
+            //
+            // const hasAllTriggers = webhookTriggers.every((t) => {
+            //     return existingWebhook.triggers.indexOf(t) !== -1;
+            // });
+            //
+            // if (!hasAllTriggers) {
+            //     updateWebhook(smoochCore, existingWebhook);
+            // }
+        },
+        (error)=>{
 
-            if (!existingWebhook) {
-                return createWebhook(smoochCore, target);
+        });
+
+    // smoochCore.appUsers.get({
+    //     appId: '5c46da91005ceb0028febd3d',
+    //     userId: 'steveb@channel5.com'
+    // }).then((response) => {
+    //         // async code
+    //         smoochCore.appUsers.sendMessage({
+    //             appId: '5c46da91005ceb0028febd3d',
+    //             userId: 'steveb@channel5.com',
+    //             message: {
+    //                 text: 'Just put some vinegar on it',
+    //                 role: 'appUser',
+    //                 type: 'text'
+    //             }
+    //         }).then((response) => {
+    //             // async code
+    //         },
+    //     (error)=>{
+    //
+    //     });
+    //     },
+    //     (error)=>{
+    //
+    //     });
+
+smoochCore.appUsers.get({
+    appId: '5c46da91005ceb0028febd3d',
+    userId: userId
+}).then((response) => {
+        // async code
+        smoochCore.appUsers.sendMessage({
+            appId: '5c46da91005ceb0028febd3d',
+            userId: userId,
+            message: {
+                text: 'app_user',
+                role: 'appUser',
+                type: 'text'
             }
+        }).then((response) => {
+                // async code
+            },
+            (error)=>{
 
-            const hasAllTriggers = webhookTriggers.every((t) => {
-                return existingWebhook.triggers.indexOf(t) !== -1;
             });
 
-            if (!hasAllTriggers) {
-                updateWebhook(smoochCore, existingWebhook);
+        smoochCore.appUsers.sendMessage({
+            appId: '5c46da91005ceb0028febd3d',
+            userId: userId,
+            message: {
+                text: 'app_maker',
+                role: 'appMaker',
+                type: 'text'
             }
-        });
-}
+        }).then((response) => {
+                // async code
+            },
+            (error)=>{
+
+            });
+    },
+    (error)=>{
+
+    });
+
+smoochCore.appUsers.getMessages({
+    appId: '5c46da91005ceb0028febd3d',
+    userId: userId,
+    query: {
+
+    }
+}).then((response) => {
+        // async code
+    },
+    (error)=>{
+
+    });
+
+    // smoochCore.appUsers.create({
+    //     appId: '5c46da91005ceb0028febd3d',
+    //     appUser: {
+    //         userId: 'steveb@channel5.com',
+    //         givenName: 'Steve',
+    //         properties: {
+    //             favoriteFood: 'prizza'
+    //         }
+    //     }
+    // }).then((response) => {
+    //     // async code
+    // },
+    // (error)=>{
+    //
+    // });
+
+
+//}
 
 function createBot(appUser) {
     const userId = appUser.userId || appUser._id;
