@@ -208,34 +208,6 @@ function handleMessages2(req, res) {
         return res.end();
     }
 
-    const stateMachine = new StateMachine({
-        script,
-        bot: createBot(req.body.appUser)
-    });
-
-    stateMachine.receiveMessage(messages[0])
-        .then(() => res.end())
-        .catch((err) => {
-            console.error('SmoochBot error:', err);
-            console.error(err.stack);
-            res.end();
-        });
-}
-
-function handleMessages(req, res) {
-    const messages = req.body.messages.reduce((prev, current) => {
-        if (current.role === 'appUser') {
-            prev.push(current);
-        }
-        return prev;
-    }, []);
-
-    if (messages.length === 0) {
-        return res.end();
-    }
-
-    const userId = req.body.appUser.userId || req.body.appUser._id;
-
     smoochCore.appUsers.sendMessage({
         appId: '5c46da91005ceb0028febd3d',
         userId: userId,
@@ -263,6 +235,36 @@ function handleMessages(req, res) {
     //         console.error(err.stack);
     //         res.end();
     //     });
+}
+
+function handleMessages(req, res) {
+    const messages = req.body.messages.reduce((prev, current) => {
+        if (current.role === 'appUser') {
+            prev.push(current);
+        }
+        return prev;
+    }, []);
+
+    if (messages.length === 0) {
+        return res.end();
+    }
+
+    const userId = req.body.appUser.userId || req.body.appUser._id;
+
+
+
+    const stateMachine = new StateMachine({
+        script,
+        bot: createBot(req.body.appUser)
+    });
+
+    stateMachine.receiveMessage(messages[0])
+        .then(() => res.end())
+        .catch((err) => {
+            console.error('SmoochBot error:', err);
+            console.error(err.stack);
+            res.end();
+        });
 
 
 }
