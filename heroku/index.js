@@ -57,34 +57,37 @@ function updateWebhook(smoochCore, existingWebhook) {
 //     // async code
 // });
 
-const userId = '4ed84fd1e09e909c165133c9';
+const userId = 'bc30d7230657c83bebb6d5fa';
 
 // Create a webhook if one doesn't already exist
 //if (process.env.SERVICE_URL) {
-    const target = "tt";//process.env.SERVICE_URL.replace(/\/$/, '') + '/webhook';
+    const target = "https://racheltest.herokuapp.com" + '/webhook';//process.env.SERVICE_URL.replace(/\/$/, '') + '/webhook';
     const smoochCore = new SmoochCore({
         jwt: jwt,
     });
 
     smoochCore.webhooks.list()
         .then((res) => {
-            // const existingWebhook = res.webhooks.find((w) => w.target === target);
-            //
-            // if (!existingWebhook) {
-            //     return createWebhook(smoochCore, target);
-            // }
-            //
-            // const hasAllTriggers = webhookTriggers.every((t) => {
-            //     return existingWebhook.triggers.indexOf(t) !== -1;
-            // });
-            //
-            // if (!hasAllTriggers) {
-            //     updateWebhook(smoochCore, existingWebhook);
-            // }
+            const existingWebhook = res.webhooks.find((w) => w.target === target);
+
+            if (!existingWebhook) {
+                return createWebhook(smoochCore, target);
+            }
+
+            const hasAllTriggers = webhookTriggers.every((t) => {
+                return existingWebhook.triggers.indexOf(t) !== -1;
+            });
+
+            if (!hasAllTriggers) {
+                updateWebhook(smoochCore, existingWebhook);
+            }
         },
         (error)=>{
 
         });
+
+
+
 
     // smoochCore.appUsers.get({
     //     appId: '5c46da91005ceb0028febd3d',
@@ -233,15 +236,39 @@ app.post('/webhook', function(req, res, next) {
 
     switch (trigger) {
         case 'message:appUser':
+            console.log('webhook.message:appUser');
             handleMessages(req, res);
             break;
 
         case 'postback':
+            console.log('webhook.postback');
             handlePostback(req, res);
             break;
 
         default:
             console.log('Ignoring unknown webhook trigger:', trigger);
+    }
+});
+
+app.post('/messages', function(req, res) {
+    console.log('webhook PAYLOAD:\n', JSON.stringify(req.body, null, 4));
+
+    const appUserId = req.body.appUser._id;
+    // Call REST API to send message https://docs.smooch.io/rest/#post-message
+    if (req.body.trigger === 'message:appUser') {
+        smoochCore.appUsers.sendMessage(appUserId, {
+            type: 'text',
+            text: 'Live long and prosper',
+            role: 'appMaker'
+        })
+            .then((response) => {
+                console.log('API RESPONSE:\n', response);
+                res.end();
+            })
+            .catch((err) => {
+                console.log('API ERROR:\n', err);
+                res.end();
+            });
     }
 });
 
