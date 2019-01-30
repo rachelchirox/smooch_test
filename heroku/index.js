@@ -195,7 +195,8 @@ function createBot(appUser) {
     });
 }
 
-function handleMessages(req, res) {
+//messages that received from client
+function handleMessages2(req, res) {
     const messages = req.body.messages.reduce((prev, current) => {
         if (current.role === 'appUser') {
             prev.push(current);
@@ -221,6 +222,51 @@ function handleMessages(req, res) {
         });
 }
 
+function handleMessages(req, res) {
+    const messages = req.body.messages.reduce((prev, current) => {
+        if (current.role === 'appUser') {
+            prev.push(current);
+        }
+        return prev;
+    }, []);
+
+    if (messages.length === 0) {
+        return res.end();
+    }
+
+    const userId = req.body.appUser.userId || req.body.appUser._id;
+
+    smoochCore.appUsers.sendMessage({
+        appId: '5c46da91005ceb0028febd3d',
+        userId: userId,
+        message: {
+            text: 'reply to: ' + messages[0].text,
+            role: 'appMaker',
+            type: 'text'
+        }
+    }).then((response) => {
+            // async code
+        },
+        (error)=>{
+
+        });
+
+    // const stateMachine = new StateMachine({
+    //     script,
+    //     bot: createBot(req.body.appUser)
+    // });
+    //
+    // stateMachine.receiveMessage(messages[0])
+    //     .then(() => res.end())
+    //     .catch((err) => {
+    //         console.error('SmoochBot error:', err);
+    //         console.error(err.stack);
+    //         res.end();
+    //     });
+
+
+}
+
 function handlePostback(req, res) {
     const postback = req.body.postbacks[0];
     if (!postback || !postback.action) {
@@ -238,12 +284,15 @@ app.post('/webhook', function(req, res, next) {
         case 'message:appUser':
             //console.log('webhook.message:appUser' + );
             console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
-            handleMessages(req, res);
+            handleMessages2(req, res);
+
+
+            //handleMessages(req, res);
             break;
 
         case 'postback':
             console.log('webhook.postback');
-            handlePostback(req, res);
+            //handlePostback(req, res);
             break;
 
         default:
