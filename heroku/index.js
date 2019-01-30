@@ -208,6 +208,9 @@ function handleMessages2(req, res) {
         return res.end();
     }
 
+    const userId = req.body.appUser.userId || req.body.appUser._id;
+
+
     smoochCore.appUsers.sendMessage({
         appId: '5c46da91005ceb0028febd3d',
         userId: userId,
@@ -248,8 +251,6 @@ function handleMessages(req, res) {
     if (messages.length === 0) {
         return res.end();
     }
-
-    const userId = req.body.appUser.userId || req.body.appUser._id;
 
 
 
