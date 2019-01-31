@@ -10,6 +10,7 @@ const script = require('../script');
 const SmoochCore = require('smooch-core');
 const jwt = require('../jwt');
 
+const appId = '5c46da91005ceb0028febd3d';
 const name = 'SmoochBot';
 const avatarUrl = 'https://s.gravatar.com/avatar/f91b04087e0125153623a3778e819c0a?s=80';
 const store = new SmoochApiStore({
@@ -48,7 +49,7 @@ function updateWebhook(smoochCore, existingWebhook) {
 
 
 // smoochCore.appUsers.getMessages({
-//     appId: '5c46da91005ceb0028febd3d',
+//     appId: appId,
 //     userId: 'c7f6e6d6c3a637261bd9656f',
 //     query: {
 //         before: 1471995721
@@ -90,12 +91,12 @@ const userId = 'bc30d7230657c83bebb6d5fa';
 
 
     // smoochCore.appUsers.get({
-    //     appId: '5c46da91005ceb0028febd3d',
+    //     appId: appId,
     //     userId: 'steveb@channel5.com'
     // }).then((response) => {
     //         // async code
     //         smoochCore.appUsers.sendMessage({
-    //             appId: '5c46da91005ceb0028febd3d',
+    //             appId: appId,
     //             userId: 'steveb@channel5.com',
     //             message: {
     //                 text: 'Just put some vinegar on it',
@@ -114,15 +115,15 @@ const userId = 'bc30d7230657c83bebb6d5fa';
     //     });
 
 smoochCore.appUsers.get({
-    appId: '5c46da91005ceb0028febd3d',
+    appId: appId,
     userId: userId
 }).then((response) => {
         // async code
         smoochCore.appUsers.sendMessage({
-            appId: '5c46da91005ceb0028febd3d',
+            appId: appId,
             userId: userId,
             message: {
-                text: 'app_user',
+                text: 'app_user222',
                 role: 'appUser',
                 type: 'text'
             }
@@ -134,7 +135,7 @@ smoochCore.appUsers.get({
             });
 
         smoochCore.appUsers.sendMessage({
-            appId: '5c46da91005ceb0028febd3d',
+            appId: appId,
             userId: userId,
             message: {
                 text: 'app_maker',
@@ -153,7 +154,7 @@ smoochCore.appUsers.get({
     });
 
 smoochCore.appUsers.getMessages({
-    appId: '5c46da91005ceb0028febd3d',
+    appId: appId,
     userId: userId,
     query: {
 
@@ -166,7 +167,7 @@ smoochCore.appUsers.getMessages({
     });
 
     // smoochCore.appUsers.create({
-    //     appId: '5c46da91005ceb0028febd3d',
+    //     appId: appId,
     //     appUser: {
     //         userId: 'steveb@channel5.com',
     //         givenName: 'Steve',
@@ -212,7 +213,7 @@ function handleMessages2(req, res) {
 
 
     smoochCore.appUsers.sendMessage({
-        appId: '5c46da91005ceb0028febd3d',
+        appId: appId,
         userId: userId,
         message: {
             text: 'reply to: ' + messages[0].text,
