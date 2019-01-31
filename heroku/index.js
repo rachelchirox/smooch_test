@@ -219,7 +219,7 @@ function handleMessages2(req, res) {
         appId: appId,
         userId: userId,
         message: {
-            text: 'reply to: ' + messages[0].text,
+            text: 'reply to: ' + messages[0].text + ' {userId: ' + userId + '}',
             role: 'appMaker',
             type: 'text'
         }
@@ -365,7 +365,7 @@ app.post('/webhook', function(req, res, next) {
             //console.log('webhook.message:appUser' + );
             console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
             handleMessages2(req, res);
-
+            //handleMessages_byFM(req, res);
 
             //handleMessages(req, res);
             break;
