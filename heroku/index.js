@@ -114,57 +114,57 @@ const userId = 'bc30d7230657c83bebb6d5fa';
     //
     //     });
 
-smoochCore.appUsers.get({
-    appId: appId,
-    userId: userId
-}).then((response) => {
-        // async code
-        smoochCore.appUsers.sendMessage({
-            appId: appId,
-            userId: userId,
-            message: {
-                text: 'app_user222',
-                role: 'appUser',
-                type: 'text'
-            }
-        }).then((response) => {
-                // async code
-            },
-            (error)=>{
+// smoochCore.appUsers.get({
+//     appId: appId,
+//     userId: userId
+// }).then((response) => {
+//         // async code
+//         smoochCore.appUsers.sendMessage({
+//             appId: appId,
+//             userId: userId,
+//             message: {
+//                 text: 'app_user222',
+//                 role: 'appUser',
+//                 type: 'text'
+//             }
+//         }).then((response) => {
+//                 // async code
+//             },
+//             (error)=>{
+//
+//             });
+//
+//         smoochCore.appUsers.sendMessage({
+//             appId: appId,
+//             userId: userId,
+//             message: {
+//                 text: 'app_maker',
+//                 role: 'appMaker',
+//                 type: 'text'
+//             }
+//         }).then((response) => {
+//                 // async code
+//             },
+//             (error)=>{
+//
+//             });
+//     },
+//     (error)=>{
+//
+//     });
 
-            });
-
-        smoochCore.appUsers.sendMessage({
-            appId: appId,
-            userId: userId,
-            message: {
-                text: 'app_maker',
-                role: 'appMaker',
-                type: 'text'
-            }
-        }).then((response) => {
-                // async code
-            },
-            (error)=>{
-
-            });
-    },
-    (error)=>{
-
-    });
-
-smoochCore.appUsers.getMessages({
-    appId: appId,
-    userId: userId,
-    query: {
-
-    }
-}).then((response) => {
-        // async code
-    },
-    (error)=>{
-
-    });
+// smoochCore.appUsers.getMessages({
+//     appId: appId,
+//     userId: userId,
+//     query: {
+//
+//     }
+// }).then((response) => {
+//         // async code
+//     },
+//     (error)=>{
+//
+//     });
 
     // smoochCore.appUsers.create({
     //     appId: appId,
