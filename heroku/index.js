@@ -266,7 +266,9 @@ function handleMessages_byFM(req, res) {
 }
 
 
-const flow_manager_path = "https://192.168.10.132:8081/flow-manager/request";
+//const flow_manager_path = "https://192.168.10.132:8081/flow-manager/request";
+const flow_manager_path = "https://flow-manager.membitbot.com/flow-manager/request";
+
 const organizationId = 'a840642b1c48e11c07fbea2';
 
 //initChat
@@ -364,8 +366,8 @@ app.post('/webhook', function(req, res, next) {
         case 'message:appUser':
             //console.log('webhook.message:appUser' + );
             console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
-            handleMessages2(req, res);
-            //handleMessages_byFM(req, res);
+            //handleMessages2(req, res);
+            handleMessages_byFM(req, res);
 
             //handleMessages(req, res);
             break;
