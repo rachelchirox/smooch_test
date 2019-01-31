@@ -199,9 +199,9 @@ function createBot(appUser) {
 //messages that received from client
 function handleMessages2(req, res) {
     const messages = req.body.messages.reduce((prev, current) => {
-        if (current.role === 'appUser') {
+       // if (current.role === 'appUser') {
             prev.push(current);
-        }
+       // }
         return prev;
     }, []);
 
