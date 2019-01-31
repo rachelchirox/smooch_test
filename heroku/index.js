@@ -9,7 +9,7 @@ const app = require('../app');
 const script = require('../script');
 const SmoochCore = require('smooch-core');
 const jwt = require('../jwt');
-
+const requestToService = require('../requestToService');
 const appId = '5c46da91005ceb0028febd3d';
 const name = 'SmoochBot';
 const avatarUrl = 'https://s.gravatar.com/avatar/f91b04087e0125153623a3778e819c0a?s=80';
@@ -211,22 +211,25 @@ function handleMessages2(req, res) {
 
     const userId = req.body.appUser.userId || req.body.appUser._id;
 
+    const language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+    sendRequest(userId, res, language, messages[0].text)
 
-    smoochCore.appUsers.sendMessage({
-        appId: appId,
-        userId: userId,
-        message: {
-            text: 'reply to: ' + messages[0].text,
-            role: 'appMaker',
-            type: 'text'
-        }
-    }).then((response) => {
-            res.end();
-            // async code
-        },
-        (error)=>{
 
-        });
+    // smoochCore.appUsers.sendMessage({
+    //     appId: appId,
+    //     userId: userId,
+    //     message: {
+    //         text: 'reply to: ' + messages[0].text,
+    //         role: 'appMaker',
+    //         type: 'text'
+    //     }
+    // }).then((response) => {
+    //         res.end();
+    //         // async code
+    //     },
+    //     (error)=>{
+    //
+    //     });
 
     // const stateMachine = new StateMachine({
     //     script,
@@ -240,6 +243,54 @@ function handleMessages2(req, res) {
     //         console.error(err.stack);
     //         res.end();
     //     });
+}
+
+const flow_manager_path = "https://192.168.10.132:8081/flow-manager/request";
+const organizationId = 'a840642b1c48e11c07fbea2';
+
+//initChat
+function sendRequest(userId, res, language, userText) {
+    let body = {type: 'message',
+        organization : organizationId,
+        sessionId : userId,
+        language : language,
+        text : userText
+    }
+    console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
+
+    requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
+
+        console.log('sendRequest to flow-manager -after :\n', JSON.stringify(data, null, 4));
+
+        console.log('sendMessage by smooch -before:\n');
+
+        smoochCore.appUsers.sendMessage({
+            appId: appId,
+            userId: userId,
+            message: {
+                text: data,
+                role: 'appMaker',
+                type: 'text'
+            }
+        }).then((response) => {
+                res.end();
+                console.log('sendMessage by smooch -after success:\n');
+                // async code
+            },
+            (error)=>{
+                console.log('sendMessage by smooch -after failure:\n');
+            });
+
+    }).catch(error => {
+        let errorMessage = '';
+        if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
+            errorMessage = "interfaceCommunicationError";
+        }
+        else {
+            errorMessage = error.body;
+        }
+        console.info(errorMessage);
+    });
 }
 
 function handleMessages(req, res) {
@@ -281,6 +332,9 @@ function handlePostback(req, res) {
     createBot(req.body.appUser).say(`You said: ${postback.action.text} (payload was: ${postback.action.payload})`)
         .then(() => res.end());
 }
+
+
+
 
 app.post('/webhook', function(req, res, next) {
     const trigger = req.body.trigger;
