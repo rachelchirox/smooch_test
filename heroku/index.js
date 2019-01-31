@@ -211,25 +211,25 @@ function handleMessages2(req, res) {
 
     const userId = req.body.appUser.userId || req.body.appUser._id;
 
-    const language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
-    sendRequest(userId, res, language, messages[0].text)
+    // const language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+    // sendRequest(userId, res, language, messages[0].text)
 
 
-    // smoochCore.appUsers.sendMessage({
-    //     appId: appId,
-    //     userId: userId,
-    //     message: {
-    //         text: 'reply to: ' + messages[0].text,
-    //         role: 'appMaker',
-    //         type: 'text'
-    //     }
-    // }).then((response) => {
-    //         res.end();
-    //         // async code
-    //     },
-    //     (error)=>{
-    //
-    //     });
+    smoochCore.appUsers.sendMessage({
+        appId: appId,
+        userId: userId,
+        message: {
+            text: 'reply to: ' + messages[0].text,
+            role: 'appMaker',
+            type: 'text'
+        }
+    }).then((response) => {
+            res.end();
+            // async code
+        },
+        (error)=>{
+
+        });
 
     // const stateMachine = new StateMachine({
     //     script,
@@ -244,6 +244,27 @@ function handleMessages2(req, res) {
     //         res.end();
     //     });
 }
+
+//messages that received from client
+function handleMessages_byFM(req, res) {
+    const messages = req.body.messages.reduce((prev, current) => {
+        if (current.role === 'appUser') {
+            prev.push(current);
+        }
+        return prev;
+    }, []);
+
+    if (messages.length === 0) {
+        return res.end();
+    }
+
+    const userId = req.body.appUser.userId || req.body.appUser._id;
+
+    const language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+    sendRequest(userId, res, language, messages[0].text)
+
+}
+
 
 const flow_manager_path = "https://192.168.10.132:8081/flow-manager/request";
 const organizationId = 'a840642b1c48e11c07fbea2';

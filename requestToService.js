@@ -7,9 +7,9 @@ let requestToService = function () {
 requestToService.prototype = {
     sendRequest: function (url, method, body = {}) {
         return new Promise((resolve, reject) => {
-            console.log('url: ' + url, 'yellow');
-            console.log('method: ' + method, 'yellow');
-            console.log('body: ' + JSON.stringify(body), 'yellow');
+            console.log('url: ' + url);
+            console.log('method: ' + method);
+            console.log('body: ' + JSON.stringify(body));
             httpServiceLocator.send(url, method ? method : 'get', body).then(
                 (response) => {
                     console.log('response: ' + JSON.stringify(response), 'yellow');
