@@ -260,7 +260,8 @@ function handleMessages_byFM(req, res) {
 
     const userId = req.body.appUser.userId || req.body.appUser._id;
 
-    const language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+    let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+    language = 'he';
     sendRequest(userId, res, language, messages[0].text)
 
 }
@@ -271,6 +272,10 @@ const flow_manager_path = "https://flow-manager.membitbot.com/flow-manager/reque
 
 const organizationId = '5a840642b1c48e11c07fbea2';
 
+// const testBody = {"type":"message","organization":"5a840642b1c48e11c07fbea2","sessionId":"7cf48d14106b853a0586ec30","language":"en-US","text":"התחל"};
+// requestToService.sendRequest(flow_manager_path, 'post', testBody).then(data => {
+//
+// });
 //initChat
 function sendRequest(userId, res, language, userText) {
     let body = {type: 'message',
