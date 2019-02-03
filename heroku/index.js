@@ -263,7 +263,7 @@ function handleMessages_byFM(req, res) {
     let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
     language = 'he';
     sendRequest(userId, res, language, messages[0].text)
-
+    res.end();
 }
 
 
@@ -327,7 +327,7 @@ function sendRequest(userId, res, language, userText) {
                  type: 'text'
              }
          }).then((response) => {
-                 res.end();
+                 //res.end();
                  console.log('sendMessage by smooch -after success:\n');
                  // async code
              },
