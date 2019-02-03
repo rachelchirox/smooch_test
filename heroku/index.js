@@ -310,7 +310,8 @@ function sendRequest(userId, res, language, userText) {
                   }]
            }]}
         }).then((response) =>
-                  res.end();
+            {
+                  //res.end();
                console.log('sendMessage by smooch -after success:\n');
                // async code
            },
