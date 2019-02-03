@@ -296,10 +296,19 @@ function sendRequest(userId, res, language, userText) {
             appId: appId,
             userId: userId,
             message: {
-                text: data,
                 role: 'appMaker',
-                type: 'text'
-            }
+                type: 'list',
+                items: [{
+                    title: 'Tacos',
+                    description: 'Beef and cheese... Mhm...',
+                    size: 'large',
+                    mediaUrl: 'https://www.tacojohns.com/globalassets/2016-tacos-menu/taco-bravo---436x420.jpg',
+                    actions: [{
+                        text: 'פתיחת קריאה',
+                        type: 'postback',
+                        payload: 'פתיחת קריאה'
+                    }]
+            }]}
         }).then((response) => {
                 res.end();
                 console.log('sendMessage by smooch -after success:\n');
@@ -308,6 +317,23 @@ function sendRequest(userId, res, language, userText) {
             (error)=>{
                 console.log('sendMessage by smooch -after failure:\n');
             });
+
+        // smoochCore.appUsers.sendMessage({
+        //     appId: appId,
+        //     userId: userId,
+        //     message: {
+        //         text: data,
+        //         role: 'appMaker',
+        //         type: 'text'
+        //     }
+        // }).then((response) => {
+        //         res.end();
+        //         console.log('sendMessage by smooch -after success:\n');
+        //         // async code
+        //     },
+        //     (error)=>{
+        //         console.log('sendMessage by smooch -after failure:\n');
+        //     });
 
     }).catch(error => {
         let errorMessage = '';
