@@ -413,13 +413,23 @@ function handleMessages(req, res) {
 }
 
 function handlePostback(req, res) {
+    console.log('handlePostback:\n', JSON.stringify(req.body, null, 4));
+
     const postback = req.body.postbacks[0];
     if (!postback || !postback.action) {
         res.end();
     }
 
-    createBot(req.body.appUser).say(`You said: ${postback.action.text} (payload was: ${postback.action.payload})`)
-        .then(() => res.end());
+
+    // const userId = req.body.appUser.userId || req.body.appUser._id;
+    //
+    // let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+    // language = 'he';
+    // sendRequest(userId, res, language, messages[0].text);
+    res.end();
+
+    // createBot(req.body.appUser).say(`You said: ${postback.action.text} (payload was: ${postback.action.payload})`)
+    //     .then(() => res.end());
 }
 
 
@@ -455,7 +465,7 @@ app.post('/webhook', function(req, res, next) {
 
         case 'postback':
             console.log('webhook.postback');
-            //handlePostback(req, res);
+            handlePostback(req, res);
             break;
 
         default:
