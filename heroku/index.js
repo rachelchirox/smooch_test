@@ -421,11 +421,10 @@ function handlePostback(req, res) {
     }
 
 
-    // const userId = req.body.appUser.userId || req.body.appUser._id;
-    //
-    // let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
-    // language = 'he';
-    // sendRequest(userId, res, language, messages[0].text);
+    const userId = req.body.appUser.userId || req.body.appUser._id;
+     let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+     language = 'he';
+     sendRequest(userId, res, language, postback.action.text);
     res.end();
 
     // createBot(req.body.appUser).say(`You said: ${postback.action.text} (payload was: ${postback.action.payload})`)
