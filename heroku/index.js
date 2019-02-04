@@ -292,51 +292,51 @@ function sendRequest(userId, res, language, userText) {
 
         console.log('sendMessage by smooch -before:\n');
 
-        smoochCore.appUsers.sendMessage({
-          appId: appId,
-          userId: userId,
-           message: {
-               role: 'appMaker',
-               type: 'list',
-               items: [{
-                   title: 'Tacos',
-                   description: 'Beef and cheese... Mhm...',
-                   size: 'large',
-                   mediaUrl: 'https://www.tacojohns.com/globalassets/2016-tacos-menu/taco-bravo---436x420.jpg',
-        actions: [{
-                       text: 'פתיחת קריאה',
-                       type: 'postback',
-                       payload: 'פתיחת קריאה'
-                  }]
-           }]}
-        }).then((response) =>
-            {
-                  //res.end();
-               console.log('sendMessage by smooch -after success:\n');
-               // async code
-           },
-           (error)=>{
-               console.log('sendMessage by smooch -after failure:\n');
-               console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+        // smoochCore.appUsers.sendMessage({
+        //   appId: appId,
+        //   userId: userId,
+        //    message: {
+        //        role: 'appMaker',
+        //        type: 'list',
+        //        items: [{
+        //            title: 'Tacos',
+        //            description: 'Beef and cheese... Mhm...',
+        //            size: 'large',
+        //            mediaUrl: 'https://www.tacojohns.com/globalassets/2016-tacos-menu/taco-bravo---436x420.jpg',
+        // actions: [{
+        //                text: 'פתיחת קריאה',
+        //                type: 'postback',
+        //                payload: 'פתיחת קריאה'
+        //           }]
+        //    }]}
+        // }).then((response) =>
+        //     {
+        //           //res.end();
+        //        console.log('sendMessage by smooch -after success:\n');
+        //        // async code
+        //    },
+        //    (error)=>{
+        //        console.log('sendMessage by smooch -after failure:\n');
+        //        console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+        //
+        //    });
 
-           });
-
-         // smoochCore.appUsers.sendMessage({
-         //     appId: appId,
-         //     userId: userId,
-         //     message: {
-         //         text: data,
-         //         role: 'appMaker',
-         //         type: 'text'
-         //     }
-         // }).then((response) => {
-         //         //res.end();
-         //         console.log('sendMessage by smooch -after success:\n');
-         //         // async code
-         //     },
-         //     (error)=>{
-         //         console.log('sendMessage by smooch -after failure:\n');
-         //     });
+         smoochCore.appUsers.sendMessage({
+             appId: appId,
+             userId: userId,
+             message: {
+                 text: data,
+                 role: 'appMaker',
+                 type: 'text'
+             }
+         }).then((response) => {
+                 //res.end();
+                 console.log('sendMessage by smooch -after success:\n');
+                 // async code
+             },
+             (error)=>{
+                 console.log('sendMessage by smooch -after failure:\n');
+             });
 
     }).catch(error => {
         let errorMessage = '';
