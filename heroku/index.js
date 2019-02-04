@@ -427,6 +427,12 @@ app.post('/fromAppMaker', function(req, res) {
     // Translation magic
 });
 
+app.post('/appuser-message',(req, res) => {
+
+    console.log('received appuser message');
+    console.log(JSON.stringify(req.body, null, 4));
+});
+
 app.post('/webhook', function(req, res, next) {
     const trigger = req.body.trigger;
     //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
