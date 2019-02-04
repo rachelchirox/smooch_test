@@ -342,6 +342,8 @@ function sendRequest(userId, res, language, userText) {
             },
             (error)=>{
                 console.log('sendMessage by smooch -after failure:\n');
+                console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+
             });
 
          // smoochCore.appUsers.sendMessage({
