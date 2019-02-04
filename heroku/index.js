@@ -332,7 +332,11 @@ function sendRequest(userId, res, language, userText) {
                     title: 'Tacos',
                     description: 'Beef and cheese... Mhm...',
                     size: 'large',
-                    mediaUrl: 'https://www.tacojohns.com/globalassets/2016-tacos-menu/taco-bravo---436x420.jpg'
+                    actions: [{
+                        text: 'פתיחת קריאה',
+                        type: 'postback',
+                        payload: 'openTicket_test'
+                    }]
                 }]
             }
         }).then((response) => {
