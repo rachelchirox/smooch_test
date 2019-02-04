@@ -410,7 +410,7 @@ app.post('/fromAppMaker', function(req, res) {
 
 app.post('/webhook', function(req, res, next) {
     const trigger = req.body.trigger;
-    console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
+    //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
     switch (trigger) {
         case 'message:appUser':
             //console.log('webhook.message:appUser' + );
@@ -428,6 +428,7 @@ app.post('/webhook', function(req, res, next) {
 
         default:
             console.log('Ignoring unknown webhook trigger:', trigger);
+            console.log('details:\n', JSON.stringify(req.body, null, 4));
     }
 });
 
