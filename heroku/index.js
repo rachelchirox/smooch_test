@@ -427,7 +427,7 @@ app.post('/fromAppMaker', function(req, res) {
     // Translation magic
 });
 
-app.post('/appuser-message',(req, res) => {
+app.post('/appuser:message',(req, res) => {
 
     console.log('received appuser message');
     console.log(JSON.stringify(req.body, null, 4));
