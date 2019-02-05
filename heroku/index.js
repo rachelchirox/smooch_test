@@ -166,6 +166,11 @@ const smoochCore = new SmoochCore({
 //
 //     });
 
+smoochCore.appUsers.get({
+    appId: appId,
+    userId: 'steveb@channel5.com'
+}).then((response) => {
+
     // smoochCore.appUsers.create({
     //     appId: appId,
     //     appUser: {
@@ -182,7 +187,7 @@ const smoochCore = new SmoochCore({
     //
     // });
 
-
+});
 //}
 
 function createBot(appUser) {
@@ -433,6 +438,7 @@ app.post('/appuser:message',(req, res) => {
     console.log(JSON.stringify(req.body, null, 4));
 });
 
+//works!
 app.post('/webhook', function(req, res, next) {
     const trigger = req.body.trigger;
     //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
@@ -454,9 +460,11 @@ app.post('/webhook', function(req, res, next) {
         default:
             console.log('Ignoring unknown webhook trigger:', trigger);
             console.log('details:\n', JSON.stringify(req.body, null, 4));
+            res.end();
     }
 });
 
+//not arrived here
 app.post('/messages', function(req, res) {
     console.log('webhook PAYLOAD:\n', JSON.stringify(req.body, null, 4));
 
