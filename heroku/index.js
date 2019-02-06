@@ -308,19 +308,34 @@ function sendRequest(userId, res, language, userText) {
                 role: 'appMaker',
                 type: 'list',
                 items: [{
-                    title: 'בחר באפשרויות הבאות',
+                    title: 'איטם 1',
                     size: 'large',
                     actions: [{
-                        text: 'פתיחת קריאה',
+                        text: 'פעולה 1',
                         type: 'postback',
                         payload: 'Open_Ticket'
                     },
                     {
-                        text: 'עדכון קריאה',
+                        text: 'פעולה 2',
                         type: 'postback',
                         payload: 'Update_Ticket'
                     }]
-                }]
+                },
+                {
+                    title: 'איטם 2',
+                    size: 'large',
+                    actions: [{
+                        text: 'פעולה 1',
+                        type: 'postback',
+                        payload: 'Open_Ticket1'
+                    },
+                    {
+                        text: 'פעולה 2',
+                        type: 'postback',
+                        payload: 'Update_Ticket2'
+                    }]
+                }
+                ]
             }
         }).then((response) => {
                 //res.end();
