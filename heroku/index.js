@@ -306,36 +306,18 @@ function sendRequest(userId, res, language, userText) {
             userId: userId,
             message: {
                 role: 'appMaker',
-                type: 'list',
-                items: [{
-                    title: 'איטם 1',
-                    size: 'large',
-                    actions: [{
-                        text: 'פעולה 1',
-                        type: 'postback',
-                        payload: 'Open_Ticket'
-                    },
-                    {
-                        text: 'פעולה 2',
-                        type: 'postback',
-                        payload: 'Update_Ticket'
-                    }]
+                type: 'text',
+                text: 'כותרת1',
+                actions: [{
+                    text: 'פעולה 1',
+                    type: 'postback',
+                    payload: 'Open_Ticket1'
                 },
-                {
-                    title: 'איטם 2',
-                    size: 'large',
-                    actions: [{
-                        text: 'פעולה 1',
-                        type: 'postback',
-                        payload: 'Open_Ticket1'
-                    },
                     {
                         text: 'פעולה 2',
                         type: 'postback',
                         payload: 'Update_Ticket2'
                     }]
-                }
-                ]
             }
         }).then((response) => {
                 //res.end();
@@ -347,6 +329,54 @@ function sendRequest(userId, res, language, userText) {
                 console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
 
             });
+
+
+        // smoochCore.appUsers.sendMessage({
+        //     appId: appId,
+        //     userId: userId,
+        //     message: {
+        //         role: 'appMaker',
+        //         type: 'list',
+        //         items: [{
+        //             title: 'איטם 1',
+        //             size: 'large',
+        //             actions: [{
+        //                 text: 'פעולה 1',
+        //                 type: 'postback',
+        //                 payload: 'Open_Ticket'
+        //             },
+        //             {
+        //                 text: 'פעולה 2',
+        //                 type: 'postback',
+        //                 payload: 'Update_Ticket'
+        //             }]
+        //         },
+        //         {
+        //             title: 'איטם 2',
+        //             size: 'large',
+        //             actions: [{
+        //                 text: 'פעולה 1',
+        //                 type: 'postback',
+        //                 payload: 'Open_Ticket1'
+        //             },
+        //             {
+        //                 text: 'פעולה 2',
+        //                 type: 'postback',
+        //                 payload: 'Update_Ticket2'
+        //             }]
+        //         }
+        //         ]
+        //     }
+        // }).then((response) => {
+        //         //res.end();
+        //         console.log('sendMessage by smooch -after success:\n');
+        //         // async code
+        //     },
+        //     (error)=>{
+        //         console.log('sendMessage by smooch -after failure:\n');
+        //         console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+        //
+        //     });
 
          // smoochCore.appUsers.sendMessage({
          //     appId: appId,
