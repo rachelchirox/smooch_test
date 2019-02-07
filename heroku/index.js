@@ -305,6 +305,7 @@ function createMessageCards(text, actions){
 }
 
 function sendMessageToClient(userId, message) {
+    console.log('message: ' + message);
     smoochCore.appUsers.sendMessage({
         appId: appId,
         userId: userId,
@@ -381,8 +382,9 @@ function sendRequest(userId, res, language, userText) {
                         });
                     });
 
+                    console.log('actions: ' + actions);
                     let messageData = createMessageCards(actions);
-                    sendMessageToClient(userId, message);
+                    sendMessageToClient(userId, messageData);
                 }
                 else {
                     let messageData = createMessageText(action.payload.chats.str, action.payload.chats.type);
