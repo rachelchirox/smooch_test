@@ -368,10 +368,12 @@ function sendRequest(userId, res, language, userText) {
 
         console.log('sendRequest to flow-manager -after :\n', JSON.stringify(data, null, 4));
 
-        console.log('sendMessage by smooch -before:\n');
+        console.log('sendMessage by smooch -before:');
+        console.log('data.actions: '+ JSON.stringify(data.actions,null,4));
 
         for (let action of data.actions) {
             if (action.type === 'addBotText') {
+                console.log('addBotText');
                 if (action.payload.chats.constructor === Array) {
                     let actions = [];
                     action.payload.chats.forEach(function (btn) {
