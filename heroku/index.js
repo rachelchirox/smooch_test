@@ -68,6 +68,9 @@ const userId = 'bc30d7230657c83bebb6d5fa';
 const smoochCore = new SmoochCore({
         jwt: jwt,
     });
+
+messagesManager.setSmoochCore(smoochCore);
+
 // Create a webhook if one doesn't already exist
 //if (process.env.SERVICE_URL) {
 //     const target = "https://racheltest.herokuapp.com" + '/webhook';//process.env.SERVICE_URL.replace(/\/$/, '') + '/webhook';

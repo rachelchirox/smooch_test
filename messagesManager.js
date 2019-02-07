@@ -8,6 +8,11 @@ const requestToService = require('./requestToService');
 let messagesManager = function () {
 };
 
+let smoochCore = null;
+messagesManager.setSmoochCore = function (smoochCore){
+    smoochCore = smoochCore;
+}
+
 messagesManager.handleWebhook = function (req, res) {
         const trigger = req.body.trigger;
         //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
