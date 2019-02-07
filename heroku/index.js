@@ -354,13 +354,18 @@ function sendMessageToClient(userId, message, res) {
     //     });
 }
 
-function sendRequest(userId, res, language, userText) {
-    let body = {type: 'message',
+function sendRequest(userId, res, language, userText, cardType='text', cardValue = null) {
+    let body = {
+        type: 'message',
         organization : organizationId,
         sessionId : userId,
         language : language,
-        text : userText
+        text : userText,
+        cardType : cardType,
+        value: cardValue
     }
+
+    //text, event
     console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
 
     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
@@ -383,7 +388,8 @@ function sendRequest(userId, res, language, userText) {
                         actions.push({
                             text: btn.str,
                             type: 'postback',
-                            payload: btn.value + '_'
+                            payload: btn.value + '_',
+                            metadata:{cardType:btn.type, cardValue:btn.value} //rachel
                         });
                     });
                     //btn.value
@@ -558,7 +564,13 @@ function handlePostback(req, res) {
     const userId = req.body.appUser.userId || req.body.appUser._id;
      let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
      language = 'he';
-     sendRequest(userId, res, language, postback.action.text);
+
+    // metadata:{cardType:btn.type, cardValue:btn.value
+    // postback.action.metadata
+    // postback.action //rachel
+     let cardType = postback.action.metadata.cardType ? postback.action.metadata.cardType : 'text';
+     let cardValue = postback.action.metadata.cardValue ? postback.action.metadata.cardValue : null;
+     sendRequest(userId, res, language, postback.action.text, cardType, cardValue);
     res.end();
 
     // createBot(req.body.appUser).say(`You said: ${postback.action.text} (payload was: ${postback.action.payload})`)
