@@ -273,8 +273,8 @@ function handleMessages_byFM(req, res) {
 
 
 //const flow_manager_path = "https://192.168.10.132:8081/flow-manager/request";
-//const flow_manager_path = "https://flow-manager.membitbot.com/flow-manager/request";
-const flow_manager_path = 'https://messenger-manager.membitbot.com/messenger-manager/request/'
+const flow_manager_path = "https://flow-manager.membitbot.com/flow-manager/request";
+//const flow_manager_path = 'https://messenger-manager.membitbot.com/messenger-manager/request/'
 const organizationId = '5a840642b1c48e11c07fbea2';
 
 // const testBody = {"type":"message","organization":"5a840642b1c48e11c07fbea2","sessionId":"7cf48d14106b853a0586ec30","language":"en-US","text":"התחל"};
@@ -307,13 +307,10 @@ function sendRequest(userId, res, language, userText) {
             message: {
                 role: 'appMaker',
                 type: 'text',
+                text:'כותרת',
 
                 actions: [
                     {
-                        text: 'כותרת',
-                        type: 'text',
-                        payload: 'Open_Ticket1'
-                    },{
                     text: 'פעולה 1',
                     type: 'postback',
                     payload: 'Open_Ticket1'
