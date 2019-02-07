@@ -10,7 +10,7 @@ let messagesManager = function () {
 
 let smoochCore = null;
 messagesManager.setSmoochCore = function (smoochCore){
-    smoochCore = smoochCore;
+    messagesManager.smoochCore = smoochCore;
 }
 
 messagesManager.handleWebhook = function (req, res) {
@@ -136,7 +136,7 @@ messagesManager.sendRequest = function (userId, res, language, userText, cardTyp
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
          console.log('message: ' + message);
-         smoochCore.appUsers.sendMessage({
+            messagesManager.smoochCore.appUsers.sendMessage({
              appId: appId,
              userId: userId,
              message: message
@@ -152,7 +152,7 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
 
              });
 
-         // smoochCore.appUsers.sendMessage({
+         // messagesManager.smoochCore.appUsers.sendMessage({
          //     appId: appId,
          //     userId: userId,
          //     message: {
