@@ -284,6 +284,75 @@ const organizationId = '5a840642b1c48e11c07fbea2';
 //initChat
 
 
+function createMessageText(text){
+    let messageData = {
+        role: 'appMaker',
+        type: 'text',
+        text: text
+    };
+    return messageData;
+
+}
+
+function createMessageCards(text, actions){
+    let messageData = {
+        role: 'appMaker',
+        type: 'text',
+        text: '',
+        actions: actions
+    };
+    return messageData;
+}
+
+function sendMessageToClient(userId, message) {
+    smoochCore.appUsers.sendMessage({
+        appId: appId,
+        userId: userId,
+        message: message
+    }).then((response) => {
+            res.end();
+            console.log('sendMessage by smooch -after success:\n');
+            // async code
+        },
+        (error)=>{
+            res.end();
+            console.log('sendMessage by smooch -after failure:\n');
+            console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+
+        });
+
+    // smoochCore.appUsers.sendMessage({
+    //     appId: appId,
+    //     userId: userId,
+    //     message: {
+    //         role: 'appMaker',
+    //         type: 'text',
+    //         text:'כותרת',
+    //
+    //         actions: [
+    //             {
+    //                 text: 'פעולה 1',
+    //                 type: 'postback',
+    //                 payload: 'Open_Ticket1'
+    //             },
+    //             {
+    //                 text: 'פעולה 2',
+    //                 type: 'postback',
+    //                 payload: 'Update_Ticket2'
+    //             }]
+    //     }
+    // }).then((response) => {
+    //         res.end();
+    //         console.log('sendMessage by smooch -after success:\n');
+    //         // async code
+    //     },
+    //     (error)=>{
+    //         res.end();
+    //         console.log('sendMessage by smooch -after failure:\n');
+    //         console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+    //
+    //     });
+}
 
 function sendRequest(userId, res, language, userText) {
     let body = {type: 'message',
@@ -300,38 +369,71 @@ function sendRequest(userId, res, language, userText) {
 
         console.log('sendMessage by smooch -before:\n');
 
+        for (let action of data.actions) {
+            if (action.type === 'addBotText') {
+                if (action.payload.chats.constructor === Array) {
+                    let actions = [];
+                    action.payload.chats.forEach(function (btn) {
+                        actions.push({
+                            text: btn.str,
+                            type: 'postback',
+                            payload: str.value
+                        });
+                    });
 
-        smoochCore.appUsers.sendMessage({
-            appId: appId,
-            userId: userId,
-            message: {
-                role: 'appMaker',
-                type: 'text',
-                text:'כותרת',
-
-                actions: [
-                    {
-                    text: 'פעולה 1',
-                    type: 'postback',
-                    payload: 'Open_Ticket1'
-                },
-                    {
-                        text: 'פעולה 2',
-                        type: 'postback',
-                        payload: 'Update_Ticket2'
-                    }]
+                    let messageData = createMessageCards(actions);
+                    sendMessageToClient(userId, message);
+                }
+                else {
+                    let messageData = createMessageText(action.payload.chats.str, action.payload.chats.type);
+                    sendMessageToClient(userId, messageData);
+                }
             }
-        }).then((response) => {
-                res.end();
-                console.log('sendMessage by smooch -after success:\n');
-                // async code
-            },
-            (error)=>{
-                res.end();
-                console.log('sendMessage by smooch -after failure:\n');
-                console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+        }
 
-            });
+
+
+        // if (data.actions){
+        //     data.actions.forEach(action =>{
+        //         if (action.type == 'addBotText'){
+        //             action.payload
+        //         }
+        //         }
+        //     )
+        // }
+
+        //good also in facebook
+        // smoochCore.appUsers.sendMessage({
+        //     appId: appId,
+        //     userId: userId,
+        //     message: {
+        //         role: 'appMaker',
+        //         type: 'text',
+        //         text:'כותרת',
+        //
+        //         actions: [
+        //             {
+        //             text: 'פעולה 1',
+        //             type: 'postback',
+        //             payload: 'Open_Ticket1'
+        //         },
+        //             {
+        //                 text: 'פעולה 2',
+        //                 type: 'postback',
+        //                 payload: 'Update_Ticket2'
+        //             }]
+        //     }
+        // }).then((response) => {
+        //         res.end();
+        //         console.log('sendMessage by smooch -after success:\n');
+        //         // async code
+        //     },
+        //     (error)=>{
+        //         res.end();
+        //         console.log('sendMessage by smooch -after failure:\n');
+        //         console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+        //
+        //     });
 
 
         // smoochCore.appUsers.sendMessage({
