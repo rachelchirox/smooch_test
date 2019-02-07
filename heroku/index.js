@@ -168,7 +168,7 @@ const smoochCore = new SmoochCore({
 
 smoochCore.appUsers.get({
     appId: appId,
-    userId: 'steveb@channel5.com'
+    userId: 'rut@i-rox.net'
 }).then((response) => {
 
     // smoochCore.appUsers.create({
@@ -307,8 +307,13 @@ function sendRequest(userId, res, language, userText) {
             message: {
                 role: 'appMaker',
                 type: 'text',
-                text: 'כותרת1',
-                actions: [{
+
+                actions: [
+                    {
+                        text: 'כותרת',
+                        type: 'text',
+                        payload: 'Open_Ticket1'
+                    },{
                     text: 'פעולה 1',
                     type: 'postback',
                     payload: 'Open_Ticket1'
@@ -320,11 +325,12 @@ function sendRequest(userId, res, language, userText) {
                     }]
             }
         }).then((response) => {
-                //res.end();
+                res.end();
                 console.log('sendMessage by smooch -after success:\n');
                 // async code
             },
             (error)=>{
+                res.end();
                 console.log('sendMessage by smooch -after failure:\n');
                 console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
 
@@ -399,6 +405,7 @@ function sendRequest(userId, res, language, userText) {
 
 
     }).catch(error => {
+        res.end();
         let errorMessage = '';
         if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
             errorMessage = "interfaceCommunicationError";
