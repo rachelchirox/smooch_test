@@ -86,10 +86,6 @@ messagesManager.sendRequest = function (userId, res, language, userText, cardTyp
 
     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
 
-        console.log('sendRequest to flow-manager -after :\n', JSON.stringify(data, null, 4));
-
-        console.log('sendMessage by smooch -before:');
-
         let dataObject = JSON.parse(data);
         console.log('data.actions: '+ JSON.stringify(dataObject,null,4));
 
@@ -119,112 +115,6 @@ messagesManager.sendRequest = function (userId, res, language, userText, cardTyp
                 }
             }
         }
-
-
-
-
-
-        //good also in facebook
-        // smoochCore.appUsers.sendMessage({
-        //     appId: appId,
-        //     userId: userId,
-        //     message: {
-        //         role: 'appMaker',
-        //         type: 'text',
-        //         text:'כותרת',
-        //
-        //         actions: [
-        //             {
-        //             text: 'פעולה 1',
-        //             type: 'postback',
-        //             payload: 'Open_Ticket1'
-        //         },
-        //             {
-        //                 text: 'פעולה 2',
-        //                 type: 'postback',
-        //                 payload: 'Update_Ticket2'
-        //             }]
-        //     }
-        // }).then((response) => {
-        //         res.end();
-        //         console.log('sendMessage by smooch -after success:\n');
-        //         // async code
-        //     },
-        //     (error)=>{
-        //         res.end();
-        //         console.log('sendMessage by smooch -after failure:\n');
-        //         console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
-        //
-        //     });
-
-
-        // smoochCore.appUsers.sendMessage({
-        //     appId: appId,
-        //     userId: userId,
-        //     message: {
-        //         role: 'appMaker',
-        //         type: 'list',
-        //         items: [{
-        //             title: 'איטם 1',
-        //             size: 'large',
-        //             actions: [{
-        //                 text: 'פעולה 1',
-        //                 type: 'postback',
-        //                 payload: 'Open_Ticket'
-        //             },
-        //             {
-        //                 text: 'פעולה 2',
-        //                 type: 'postback',
-        //                 payload: 'Update_Ticket'
-        //             }]
-        //         },
-        //         {
-        //             title: 'איטם 2',
-        //             size: 'large',
-        //             actions: [{
-        //                 text: 'פעולה 1',
-        //                 type: 'postback',
-        //                 payload: 'Open_Ticket1'
-        //             },
-        //             {
-        //                 text: 'פעולה 2',
-        //                 type: 'postback',
-        //                 payload: 'Update_Ticket2'
-        //             }]
-        //         }
-        //         ]
-        //     }
-        // }).then((response) => {
-        //         //res.end();
-        //         console.log('sendMessage by smooch -after success:\n');
-        //         // async code
-        //     },
-        //     (error)=>{
-        //         console.log('sendMessage by smooch -after failure:\n');
-        //         console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
-        //
-        //     });
-
-        // smoochCore.appUsers.sendMessage({
-        //     appId: appId,
-        //     userId: userId,
-        //     message: {
-        //         text: data,
-        //         role: 'appMaker',
-        //         type: 'text'
-        //     }
-        // }).then((response) => {
-        //         //res.end();
-        //         console.log('sendMessage by smooch -after success:\n');
-        //         // async code
-        //     },
-        //     (error)=>{
-        //         console.log('sendMessage by smooch -after failure:\n');
-        //     });
-
-
-
-
     }).catch(error => {
         res.end();
         let errorMessage = '';
@@ -308,5 +198,4 @@ messagesManager.createMessageCards = function(actions){
     return messageData;
 }
 
-let instance = new messagesManager();
-module.exports = instance;
+module.exports = messagesManager;
