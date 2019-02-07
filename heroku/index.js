@@ -294,11 +294,10 @@ function createMessageText(text){
 
 }
 
-function createMessageCards(text, actions){
+function createMessageCards(actions){
     let messageData = {
         role: 'appMaker',
         type: 'text',
-        text: 'חייב כותרת',
         actions: actions
     };
     return messageData;
