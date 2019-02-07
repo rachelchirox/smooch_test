@@ -377,8 +377,10 @@ function sendRequest(userId, res, language, userText) {
             if (action.type === 'addBotText') {
                 console.log('addBotText');
                 if (action.payload.chats.constructor === Array) {
+                    console.log('Array');
                     let actions = [];
                     action.payload.chats.forEach(function (btn) {
+                        console.log('btn: ' +JSON.stringify(btn, null, 4) );
                         actions.push({
                             text: btn.str,
                             type: 'postback',
