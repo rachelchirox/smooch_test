@@ -166,28 +166,28 @@ const smoochCore = new SmoochCore({
 //
 //     });
 
-smoochCore.appUsers.get({
-    appId: appId,
-    userId: 'rut@i-rox.net'
-}).then((response) => {
-
-    // smoochCore.appUsers.create({
-    //     appId: appId,
-    //     appUser: {
-    //         userId: 'steveb@channel5.com',
-    //         givenName: 'Steve',
-    //         properties: {
-    //             favoriteFood: 'prizza'
-    //         }
-    //     }
-    // }).then((response) => {
-    //     // async code
-    // },
-    // (error)=>{
-    //
-    // });
-
-});
+// smoochCore.appUsers.get({
+//     appId: appId,
+//     userId: 'rut@i-rox.net'
+// }).then((response) => {
+//
+//     // smoochCore.appUsers.create({
+//     //     appId: appId,
+//     //     appUser: {
+//     //         userId: 'steveb@channel5.com',
+//     //         givenName: 'Steve',
+//     //         properties: {
+//     //             favoriteFood: 'prizza'
+//     //         }
+//     //     }
+//     // }).then((response) => {
+//     //     // async code
+//     // },
+//     // (error)=>{
+//     //
+//     // });
+//
+// });
 //}
 
 function createBot(appUser) {
