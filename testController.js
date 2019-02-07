@@ -8,3 +8,5 @@ router.route('/sendResponse')
         res.json('ok');
 
     });
+
+module.exports = router;
