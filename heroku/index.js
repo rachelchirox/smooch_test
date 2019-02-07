@@ -384,7 +384,7 @@ function sendRequest(userId, res, language, userText) {
                         actions.push({
                             text: btn.str,
                             type: 'postback',
-                            payload: str.value
+                            payload: btn.value
                         });
                     });
 
