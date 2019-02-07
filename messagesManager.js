@@ -92,35 +92,8 @@ messagesManager.sendRequest = function (userId, res, language, userText, cardTyp
 
     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
 
-        let dataObject = JSON.parse(data);
-        console.log('data.actions: '+ JSON.stringify(dataObject,null,4));
+        requestToService.handleReponseFromServer(data);
 
-        for (let action of dataObject.actions) {
-            if (action.type === 'addBotText') {
-                console.log('addBotText');
-                if (action.payload.chats.constructor === Array) {
-                    console.log('Array');
-                    let actions = [];
-                    action.payload.chats.forEach(function (btn) {
-                        console.log('btn: ' +JSON.stringify(btn, null, 4) );
-                        actions.push({
-                            text: btn.str,
-                            type: 'postback',
-                            payload: btn.value + '_',
-                            metadata:{cardType:btn.type, cardValue:btn.value} //rachel
-                        });
-                    });
-                    //btn.value
-                    console.log('actions: ' + actions);
-                    let messageData =  messagesManager.createMessageCards(actions);
-                    messagesManager.sendMessageToClient(userId, messageData, res);
-                }
-                else {
-                    let messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
-                    messagesManager.sendMessageToClient(userId, messageData, res);
-                }
-            }
-        }
     }).catch(error => {
         res.end();
         let errorMessage = '';
@@ -133,6 +106,38 @@ messagesManager.sendRequest = function (userId, res, language, userText, cardTyp
         console.info(errorMessage);
     });
 };
+
+messagesManager.handleReponseFromServer = function(data) {
+    let dataObject = JSON.parse(data);
+    console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
+
+    for (let action of dataObject.actions) {
+        if (action.type === 'addBotText') {
+            console.log('addBotText');
+            if (action.payload.chats.constructor === Array) {
+                console.log('Array');
+                let actions = [];
+                action.payload.chats.forEach(function (btn) {
+                    console.log('btn: ' + JSON.stringify(btn, null, 4));
+                    actions.push({
+                        text: btn.str,
+                        type: 'postback',
+                        payload: btn.value + '_',
+                        metadata: {cardType: btn.type, cardValue: btn.value} //rachel
+                    });
+                });
+                //btn.value
+                console.log('actions: ' + actions);
+                let messageData = messagesManager.createMessageCards(actions);
+                messagesManager.sendMessageToClient(userId, messageData, res);
+            }
+            else {
+                let messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
+                messagesManager.sendMessageToClient(userId, messageData, res);
+            }
+        }
+    }
+}
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
          console.log('message: ' + message);

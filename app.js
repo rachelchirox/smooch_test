@@ -19,5 +19,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 //     });
 // });
 app.use('/', routes);
-app.use('/test', testController); //new
+app.use('/test', testController);
 module.exports = app;
