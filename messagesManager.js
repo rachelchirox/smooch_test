@@ -1,4 +1,9 @@
 "use strict";
+const config = require('config'),
+    flow_manager_path = config.get('flow_manager_path'),
+    organizationId = config.get('organizationId'),
+    appId = config.get('appId');
+
 const requestToService = require('./requestToService');
 let messagesManager = function () {
 };

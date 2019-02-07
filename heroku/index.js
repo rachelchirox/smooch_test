@@ -1,5 +1,10 @@
 'use strict';
 
+const config = require('config'),
+    flow_manager_path = config.get('flow_manager_path'),
+    organizationId = config.get('organizationId'),
+    appId = config.get('appId');
+
 const smoochBot = require('smooch-bot');
 const MemoryLock = smoochBot.MemoryLock;
 const SmoochApiStore = smoochBot.SmoochApiStore;
@@ -11,7 +16,7 @@ const SmoochCore = require('smooch-core');
 const jwt = require('../jwt');
 const requestToService = require('../requestToService');
 const messagesManager = require('../messagesManager');
-const appId = '5c46da91005ceb0028febd3d';
+//const appId = '5c46da91005ceb0028febd3d';
 const name = 'SmoochBot';
 const avatarUrl = 'https://s.gravatar.com/avatar/f91b04087e0125153623a3778e819c0a?s=80';
 const store = new SmoochApiStore({
@@ -274,9 +279,9 @@ function handleMessages2(req, res) {
 
 
 //const flow_manager_path = "https://192.168.10.132:8081/flow-manager/request";
-const flow_manager_path = "https://flow-manager.membitbot.com/flow-manager/request";
+//const flow_manager_path = "https://flow-manager.membitbot.com/flow-manager/request";
 //const flow_manager_path = 'https://messenger-manager.membitbot.com/messenger-manager/request/'
-const organizationId = '5a840642b1c48e11c07fbea2';
+//const organizationId = '5a840642b1c48e11c07fbea2';
 
 // const testBody = {"type":"message","organization":"5a840642b1c48e11c07fbea2","sessionId":"7cf48d14106b853a0586ec30","language":"en-US","text":"התחל"};
 // requestToService.sendRequest(flow_manager_path, 'post', testBody).then(data => {
