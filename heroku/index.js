@@ -298,7 +298,7 @@ function createMessageCards(text, actions){
     let messageData = {
         role: 'appMaker',
         type: 'text',
-        text: '',
+        text: 'חייב כותרת',
         actions: actions
     };
     return messageData;
