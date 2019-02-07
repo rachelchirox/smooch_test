@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
+const testController = require('./testController')
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -15,4 +16,5 @@ app.get('/', function(req, res) {
     });
 });
 
+app.use('/test', testController);
 module.exports = app;
