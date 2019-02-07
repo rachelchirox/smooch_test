@@ -3,17 +3,13 @@ const requestToService = require('./requestToService');
 let messagesManager = function () {
 };
 
-messagesManager.handleWebhook = function (url, method, body = {}) {
+messagesManager.handleWebhook = function (req, res) {
         const trigger = req.body.trigger;
         //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
         switch (trigger) {
             case 'message:appUser':
-                //console.log('webhook.message:appUser' + );
                 console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
-                //handleMessages2(req, res);
                 messagesManager.handleMessages_byFM(req, res);
-
-                //handleMessages(req, res);
                 break;
 
             case 'postback':
