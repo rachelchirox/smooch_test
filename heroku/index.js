@@ -371,7 +371,8 @@ function sendRequest(userId, res, language, userText) {
         console.log('sendMessage by smooch -before:');
         console.log('data.actions: '+ JSON.stringify(data.actions,null,4));
 
-        for (let action of data.actions) {
+        let dataActions = JSON.parse(data.actions);
+        for (let action of dataActions) {
             if (action.type === 'addBotText') {
                 console.log('addBotText');
                 if (action.payload.chats.constructor === Array) {
