@@ -383,10 +383,10 @@ function sendRequest(userId, res, language, userText) {
                         actions.push({
                             text: btn.str,
                             type: 'postback',
-                            payload: btn.value
+                            payload: btn.value + '_'
                         });
                     });
-
+                    //btn.value
                     console.log('actions: ' + actions);
                     let messageData = createMessageCards(actions);
                     sendMessageToClient(userId, messageData, res);
@@ -400,14 +400,7 @@ function sendRequest(userId, res, language, userText) {
 
 
 
-        // if (data.actions){
-        //     data.actions.forEach(action =>{
-        //         if (action.type == 'addBotText'){
-        //             action.payload
-        //         }
-        //         }
-        //     )
-        // }
+
 
         //good also in facebook
         // smoochCore.appUsers.sendMessage({
