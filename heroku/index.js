@@ -16,7 +16,7 @@ const SmoochCore = require('smooch-core');
 const jwt = require('../jwt');
 const requestToService = require('../requestToService');
 const messagesManager = require('../messagesManager');
-//const appId = '5c46da91005ceb0028febd3d';
+//const appId = '5c6007ce383ee5002262e55d';
 const name = 'SmoochBot';
 const avatarUrl = 'https://s.gravatar.com/avatar/f91b04087e0125153623a3778e819c0a?s=80';
 const store = new SmoochApiStore({

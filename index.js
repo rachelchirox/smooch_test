@@ -4,7 +4,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', {
-        appToken: "5c46da91005ceb0028febd3d"
+        appToken: "5c6007ce383ee5002262e55d"
     });
 });
 

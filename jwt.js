@@ -2,6 +2,10 @@
 
 const jsonwebtoken = require('jsonwebtoken');
 
+const config = require('config'),
+    smoochSecret = config.get('smoochSecret'),
+    kid = config.get('kid');
+
 // const jwt = jsonwebtoken.sign({
 //     scope: 'app'
 // }, process.env.SMOOCH_SECRET, {
@@ -12,9 +16,9 @@ const jsonwebtoken = require('jsonwebtoken');
 
 const jwt = jsonwebtoken.sign({
     scope: 'app'
-}, "yALmS9bSdH9IZf5Hw4TArSTt54k_IqXKrivTraNxbZQPagGoKrhqq5hCpAPY-Md8OXpMnUhB8EzHXEG0blzoBw", {
+}, smoochSecret, {
     headers: {
-        kid: "app_5c4d91c9c74c040023423c98",
+        kid: kid,
         typ: 'JWT',
         alg: 'HS256'
     }

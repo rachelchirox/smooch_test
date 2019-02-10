@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.get('/', function(req, res) {
 //     res.render('index', {
-//         appToken: "5c46da91005ceb0028febd3d"
+//         appToken: "5c6007ce383ee5002262e55d"
 //     });
 // });
 app.use('/', routes);
