@@ -124,7 +124,7 @@ messagesManager.handleReponseFromServer = function(dataObject) {
     //                     text: btn.str,
     //                     type: 'postback',
     //                     payload: btn.value + '_',
-    //                     metadata: {cardType: btn.type, cardValue: btn.value} //rachel
+    //                     metadata: {cardType: btn.type, cardValue: btn.value}
     //                 });
     //             });
     //             //btn.value
@@ -154,7 +154,7 @@ messagesManager.handleReponseFromServer = function(dataObject) {
                         text: btn.str,
                         type: 'postback',
                         payload: btn.value + '_',
-                        metadata: {cardType: btn.type, cardValue: btn.value} //rachel
+                        metadata: {cardType: btn.type, cardValue: btn.value}
                     });
                 });
 
@@ -166,10 +166,14 @@ messagesManager.handleReponseFromServer = function(dataObject) {
                 messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
             }
 
+            console.log('1ppp');
             messagesManager.sendMessageToClient(userId, messageData, res).then((response)=>{
+                console.log('8ppp');
                 let leftItems = dataObject.actions.shift();
                 //let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
+                console.log('9ppp');
                 if (leftItems.length > 0) {
+
                     messagesManager.handleReponseFromServer({dataObject : leftItems});
                 }
              });
@@ -180,27 +184,34 @@ messagesManager.handleReponseFromServer = function(dataObject) {
 
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
+    console.log('2ppp');
     return new Promise((resolve, reject) => {
         try {
+            console.log('3ppp');
             console.log('message: ' + JSON.stringify(message, null, 4));
+            console.log('4ppp');
             messagesManager.smoochCore.appUsers.sendMessage({
                 appId: appId,
                 userId: userId,
                 message: message
             }).then((response) => {
                     //res.end();
+                    console.log('5ppp');
                     console.log('sendMessage by smooch - succeeded:\n');
                     return resolve();
                 },
                 (error) => {
                     //res.end();
+                    console.log('6ppp');
                     console.log('sendMessage by smooch - failed:\n');
                     console.log(JSON.stringify(error, null, 4));
+                    console.log('7ppp');
                     return reject(error);
                 });
         }
         catch (err) {
             //common.emit('log', 'EXCEPTION - Failed finished httpServiceLocator - send function,\nerror:' + JSON.stringify(err), 'error');
+            console.log('8ppp');
             return reject(err);
         }
     });
