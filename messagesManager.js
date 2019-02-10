@@ -93,7 +93,7 @@ messagesManager.sendRequestToServer = function (userId, res, language, userText,
     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
 
         let dataObject = JSON.parse(data);
-        requestToService.handleReponseFromServer(dataObject);
+        messagesManager.handleReponseFromServer(dataObject);
 
     }).catch(error => {
         res.end();
