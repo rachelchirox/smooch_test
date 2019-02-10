@@ -172,6 +172,7 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                 let leftItems = dataObject.actions.shift();
                 //let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
                 console.log('9ppp');
+                console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
                 if (leftItems.length > 0) {
 
                     messagesManager.handleReponseFromServer({dataObject : leftItems}, userId);
