@@ -169,13 +169,13 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
             console.log('1ppp');
             messagesManager.sendMessageToClient(userId, messageData).then((response)=>{
                 console.log('8ppp');
-                let leftItems = dataObject.actions.shift();
-                //let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
+                //let leftItems = dataObject.actions.shift();
+                let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
                 console.log('9ppp');
                 console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
                 if (leftItems.length > 0) {
 
-                    messagesManager.handleReponseFromServer({dataObject : leftItems}, userId);
+                    messagesManager.handleReponseFromServer({actions : leftItems}, userId);
                 }
              });
         }
