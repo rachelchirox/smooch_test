@@ -93,7 +93,7 @@ messagesManager.sendRequestToServer = function (userId, res, language, userText,
     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
 
         let dataObject = JSON.parse(data);
-        messagesManager.handleReponseFromServer(dataObject);
+        messagesManager.handleReponseFromServer(dataObject, userId);
 
     }).catch(error => {
         res.end();
@@ -108,7 +108,7 @@ messagesManager.sendRequestToServer = function (userId, res, language, userText,
     });
 };
 
-messagesManager.handleReponseFromServer = function(dataObject) {
+messagesManager.handleReponseFromServer = function(dataObject, userId) {
     //let dataObject = JSON.parse(data);
     console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
 
@@ -167,14 +167,14 @@ messagesManager.handleReponseFromServer = function(dataObject) {
             }
 
             console.log('1ppp');
-            messagesManager.sendMessageToClient(userId, messageData, res).then((response)=>{
+            messagesManager.sendMessageToClient(userId, messageData).then((response)=>{
                 console.log('8ppp');
                 let leftItems = dataObject.actions.shift();
                 //let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
                 console.log('9ppp');
                 if (leftItems.length > 0) {
 
-                    messagesManager.handleReponseFromServer({dataObject : leftItems});
+                    messagesManager.handleReponseFromServer({dataObject : leftItems}, userId);
                 }
              });
         }
