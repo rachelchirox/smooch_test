@@ -612,6 +612,7 @@ app.post('/appuser:message',(req, res) => {
 
 //works!
 app.post('/webhook', function(req, res, next) {
+    console.log('qqqq', JSON.stringify(req, null, 4));
     messagesManager.handleWebhook(req, res);
     // const trigger = req.body.trigger;
     // //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
