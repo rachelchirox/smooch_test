@@ -51,7 +51,13 @@ messagesManager.handleMessages_byFM = function(req, res) {
 
         let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
         language = 'he';
-        messagesManager.sendRequestToServer(userId, res, language, messages[0].text)
+
+        let userText = messages[0].text;
+        if (messages[0].type == 'image'){
+            userText = messages[0].mediaUrl;
+        }
+
+        messagesManager.sendRequestToServer(userId, res, language, userText)
         res.end();
     };
 
@@ -78,6 +84,7 @@ messagesManager.handlePostback = function(req, res) {
      };
 
 messagesManager.sendRequestToServer = function (userId, res, language, userText, cardType='text', cardValue = null) {
+
     let body = {
         type: 'message',
         organization : organizationId,
@@ -166,12 +173,11 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                 messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
             }
 
-            console.log('1ppp');
             messagesManager.sendMessageToClient(userId, messageData).then((response)=>{
-                console.log('8ppp');
+
                 //let leftItems = dataObject.actions.shift();
                 let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
-                console.log('9ppp');
+
                 console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
                 if (leftItems.length > 0) {
 
@@ -185,34 +191,27 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
 
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
-    console.log('2ppp');
     return new Promise((resolve, reject) => {
         try {
-            console.log('3ppp');
             console.log('message: ' + JSON.stringify(message, null, 4));
-            console.log('4ppp');
             messagesManager.smoochCore.appUsers.sendMessage({
                 appId: appId,
                 userId: userId,
                 message: message
             }).then((response) => {
                     //res.end();
-                    console.log('5ppp');
                     console.log('sendMessage by smooch - succeeded:\n');
                     return resolve();
                 },
                 (error) => {
                     //res.end();
-                    console.log('6ppp');
                     console.log('sendMessage by smooch - failed:\n');
                     console.log(JSON.stringify(error, null, 4));
-                    console.log('7ppp');
                     return reject(error);
                 });
         }
         catch (err) {
-            //common.emit('log', 'EXCEPTION - Failed finished httpServiceLocator - send function,\nerror:' + JSON.stringify(err), 'error');
-            console.log('8ppp');
+            console.log('EXCEPTION - Failed finished httpServiceLocator - send function,\nerror:' + JSON.stringify(err));
             return reject(err);
         }
     });
