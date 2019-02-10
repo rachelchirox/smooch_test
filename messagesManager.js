@@ -32,6 +32,7 @@ messagesManager.handleWebhook = function (req, res) {
                 console.log('details:\n', JSON.stringify(req.body, null, 4));
                 res.end();
         }
+    res.end();
     };
 
 messagesManager.handleMessages_byFM = function(req, res) {
@@ -50,7 +51,7 @@ messagesManager.handleMessages_byFM = function(req, res) {
 
         let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
         language = 'he';
-        messagesManager.sendRequest(userId, res, language, messages[0].text)
+        messagesManager.sendRequestToServer(userId, res, language, messages[0].text)
         res.end();
     };
 
@@ -69,14 +70,14 @@ messagesManager.handlePostback = function(req, res) {
 
          let cardType = postback.action.metadata.cardType ? postback.action.metadata.cardType : 'text';
          let cardValue = postback.action.metadata.cardValue ? postback.action.metadata.cardValue : null;
-         messagesManager.sendRequest(userId, res, language, postback.action.text, cardType, cardValue);
+         messagesManager.sendRequestToServer(userId, res, language, postback.action.text, cardType, cardValue);
          res.end();
 
          // createBot(req.body.appUser).say(`You said: ${postback.action.text} (payload was: ${postback.action.payload})`)
          //     .then(() => res.end());
      };
 
-messagesManager.sendRequest = function (userId, res, language, userText, cardType='text', cardValue = null) {
+messagesManager.sendRequestToServer = function (userId, res, language, userText, cardType='text', cardValue = null) {
     let body = {
         type: 'message',
         organization : organizationId,
@@ -87,12 +88,12 @@ messagesManager.sendRequest = function (userId, res, language, userText, cardTyp
         value: cardValue
     }
 
-    //text, event
     console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
 
     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
 
-        requestToService.handleReponseFromServer(data);
+        let dataObject = JSON.parse(data);
+        requestToService.handleReponseFromServer(dataObject);
 
     }).catch(error => {
         res.end();
@@ -107,13 +108,43 @@ messagesManager.sendRequest = function (userId, res, language, userText, cardTyp
     });
 };
 
-messagesManager.handleReponseFromServer = function(data) {
-    let dataObject = JSON.parse(data);
+messagesManager.handleReponseFromServer = function(dataObject) {
+    //let dataObject = JSON.parse(data);
     console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
 
-    for (let action of dataObject.actions) {
+    // for (let action of dataObject.actions) {
+    //     if (action.type === 'addBotText') {
+    //         console.log('addBotText');
+    //         if (action.payload.chats.constructor === Array) {
+    //             console.log('Array');
+    //             let actions = [];
+    //             action.payload.chats.forEach(function (btn) {
+    //                 console.log('btn: ' + JSON.stringify(btn, null, 4));
+    //                 actions.push({
+    //                     text: btn.str,
+    //                     type: 'postback',
+    //                     payload: btn.value + '_',
+    //                     metadata: {cardType: btn.type, cardValue: btn.value} //rachel
+    //                 });
+    //             });
+    //             //btn.value
+    //             console.log('actions: ' + actions);
+    //             let messageData = messagesManager.createMessageCards(actions);
+    //             messagesManager.sendMessageToClient(userId, messageData, res);
+    //         }
+    //         else {
+    //             let messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
+    //             messagesManager.sendMessageToClient(userId, messageData, res);
+    //         }
+    //     }
+    // }
+
+    //for (let action of dataObject.actions) {
+    if (dataObject.actions && dataObject.actions.length){
+        let action = dataObject.actions[0];
         if (action.type === 'addBotText') {
             console.log('addBotText');
+            let messageData = null;
             if (action.payload.chats.constructor === Array) {
                 console.log('Array');
                 let actions = [];
@@ -126,69 +157,55 @@ messagesManager.handleReponseFromServer = function(data) {
                         metadata: {cardType: btn.type, cardValue: btn.value} //rachel
                     });
                 });
-                //btn.value
+
                 console.log('actions: ' + actions);
-                let messageData = messagesManager.createMessageCards(actions);
-                messagesManager.sendMessageToClient(userId, messageData, res);
+                messageData = messagesManager.createMessageCards(actions);
+
             }
             else {
-                let messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
-                messagesManager.sendMessageToClient(userId, messageData, res);
+                messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
             }
+
+            messagesManager.sendMessageToClient(userId, messageData, res).then((response)=>{
+                let leftItems = dataObject.actions.shift();
+                //let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
+                if (leftItems.length > 0) {
+                    messagesManager.handleReponseFromServer({dataObject : leftItems});
+                }
+             });
         }
     }
-}
+};
+
+
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
-         console.log('message: ' + message);
+    return new Promise((resolve, reject) => {
+        try {
+            console.log('message: ' + JSON.stringify(message, null, 4));
             messagesManager.smoochCore.appUsers.sendMessage({
-             appId: appId,
-             userId: userId,
-             message: message
-         }).then((response) => {
-                 res.end();
-                 console.log('sendMessage by smooch -after success:\n');
-                 // async code
-             },
-             (error) => {
-                 res.end();
-                 console.log('sendMessage by smooch -after failure:\n');
-                 console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
+                appId: appId,
+                userId: userId,
+                message: message
+            }).then((response) => {
+                    //res.end();
+                    console.log('sendMessage by smooch - succeeded:\n');
+                    return resolve();
+                },
+                (error) => {
+                    //res.end();
+                    console.log('sendMessage by smooch - failed:\n');
+                    console.log(JSON.stringify(error, null, 4));
+                    return reject(error);
+                });
+        }
+        catch (err) {
+            //common.emit('log', 'EXCEPTION - Failed finished httpServiceLocator - send function,\nerror:' + JSON.stringify(err), 'error');
+            return reject(err);
+        }
+    });
+};
 
-             });
-
-         // messagesManager.smoochCore.appUsers.sendMessage({
-         //     appId: appId,
-         //     userId: userId,
-         //     message: {
-         //         role: 'appMaker',
-         //         type: 'text',
-         //         text:'כותרת',
-         //
-         //         actions: [
-         //             {
-         //                 text: 'פעולה 1',
-         //                 type: 'postback',
-         //                 payload: 'Open_Ticket1'
-         //             },
-         //             {
-         //                 text: 'פעולה 2',
-         //                 type: 'postback',
-         //                 payload: 'Update_Ticket2'
-         //             }]
-         //     }
-         // }).then((response) => {
-         //         res.end();
-         //         console.log('sendMessage by smooch -after success:\n');
-         //         // async code
-         //     },
-         //     (error)=>{
-         //         res.end();
-         //         console.log('sendMessage by smooch -after failure:\n');
-         //         console.log('fromAppUser:\n', JSON.stringify(error, null, 4));
-         //
-         //     });
-     };
 
 messagesManager.createMessageText = function(text){
     let messageData = {
