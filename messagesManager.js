@@ -36,10 +36,10 @@ messagesManager.handleWebhook = function (req, res) {
         }
     }
     catch (err) {
-        //console.log('user: ' + req.body.appUser.userId || req.body.appUser._id);
+        console.log('user: ' + req.body.appUser.userId || req.body.appUser._id);
         console.log('11req: ' + JSON.stringify(req.body, null, 4));
         console.log('11res: ' + JSON.stringify(res.body, null, 4));
-        console.log('EXCEPTION - Failed on messagesManager.handleWebhook,\nerror:' + JSON.stringify(err.body, null, 4));
+        console.log('EXCEPTION - Failed on messagesManager.handleWebhook,\nerror:' + JSON.stringify(err));
     }
     finally {
         res.end();
@@ -47,6 +47,7 @@ messagesManager.handleWebhook = function (req, res) {
 };
 
 messagesManager.handleMessagesFromClient = function(req, res) {
+        console.log('111');
         const messages = req.body.messages.reduce((prev, current) => {
             if (current.role === 'appUser') {
                 prev.push(current);
@@ -54,20 +55,25 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             return prev;
         }, []);
 
+    console.log('222');
         if (messages.length === 0) {
             return res.end();
         }
-
+    console.log('333');
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
+    console.log('444' + userId);
         let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
         language = 'he';
 
+    console.log('555');
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
             userText = messages[0].mediaUrl;
+            console.log('666');
         }
 
+    console.log('777');
         messagesManager.sendRequestToServer('sendMessageToBot', userId, res, language, userText)
     };
 
@@ -99,6 +105,7 @@ messagesManager.handlePostback = function(req, res) {
 
     messagesManager.sendRequestToServer = function (actionName, userId, res, language, userText, cardType='text', cardValue = null) {
 
+        console.log('888');
     let body = {
         type : 'message',
         organization : organizationId,
@@ -108,7 +115,6 @@ messagesManager.handlePostback = function(req, res) {
         cardType : cardType,
         value: cardValue
     }
-
     console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
 
     //     //rachel
