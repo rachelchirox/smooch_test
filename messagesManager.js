@@ -14,28 +14,36 @@ messagesManager.setSmoochCore = function (smoochCore){
 }
 
 messagesManager.handleWebhook = function (req, res) {
+    try {
         const trigger = req.body.trigger;
-        //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
+        console.log('webhook trigger: ', trigger);
         switch (trigger) {
             case 'message:appUser':
-                console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
-                messagesManager.handleMessages_byFM(req, res);
+                messagesManager.handleMessagesFromClient(req, res);
                 break;
 
             case 'postback':
-                console.log('webhook.postback');
                 messagesManager.handlePostback(req, res);
+                break;
+
+            case 'conversation:start':
+                messagesManager.handleConversationStart(req, res);
                 break;
 
             default:
                 console.log('Ignoring unknown webhook trigger:', trigger);
                 console.log('details:\n', JSON.stringify(req.body, null, 4));
-                res.end();
         }
-    res.end();
-    };
+    }
+    catch (err) {
+        console.log('EXCEPTION - Failed on messagesManager.handleWebhook,\nerror:' + JSON.stringify(err));
+    }
+    finally {
+        res.end();
+    }
+};
 
-messagesManager.handleMessages_byFM = function(req, res) {
+messagesManager.handleMessagesFromClient = function(req, res) {
         const messages = req.body.messages.reduce((prev, current) => {
             if (current.role === 'appUser') {
                 prev.push(current);
@@ -57,8 +65,7 @@ messagesManager.handleMessages_byFM = function(req, res) {
             userText = messages[0].mediaUrl;
         }
 
-        messagesManager.sendRequestToServer(userId, res, language, userText)
-        res.end();
+        messagesManager.sendRequestToServer('sendMessageToBot', userId, res, language, userText)
     };
 
 messagesManager.handlePostback = function(req, res) {
@@ -69,24 +76,28 @@ messagesManager.handlePostback = function(req, res) {
              res.end();
          }
 
-
          const userId = req.body.appUser.userId || req.body.appUser._id;
          let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
          language = 'he';
 
          let cardType = postback.action.metadata.cardType ? postback.action.metadata.cardType : 'text';
          let cardValue = postback.action.metadata.cardValue ? postback.action.metadata.cardValue : null;
-         messagesManager.sendRequestToServer(userId, res, language, postback.action.text, cardType, cardValue);
-         res.end();
-
-         // createBot(req.body.appUser).say(`You said: ${postback.action.text} (payload was: ${postback.action.payload})`)
-         //     .then(() => res.end());
+         messagesManager.sendRequestToServer('sendMessageToBot', userId, res, language, postback.action.text, cardType, cardValue);
      };
 
-messagesManager.sendRequestToServer = function (userId, res, language, userText, cardType='text', cardValue = null) {
+    messagesManager.handleConversationStart = function(req, res) {
+        console.log('handleConversationStart:\n', JSON.stringify(req.body, null, 4));
+        const userId = req.body.appUser.userId || req.body.appUser._id;
+
+        let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+        language = 'he';
+        messagesManager.sendRequestToServer('initSession', userId, res, language, '')
+    };
+
+    messagesManager.sendRequestToServer = function (actionName, userId, res, language, userText, cardType='text', cardValue = null) {
 
     let body = {
-        type: 'message',
+        type : 'message',
         organization : organizationId,
         sessionId : userId,
         language : language,
@@ -97,13 +108,16 @@ messagesManager.sendRequestToServer = function (userId, res, language, userText,
 
     console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
 
-    requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
+    //     //rachel
+    // requestToService.sendRequest(flow_manager_path + '/'+ actionName, 'post', body).then(data => {
+    //
+    //     let dataObject = JSON.parse(data);
+    //     messagesManager.handleReponseFromServer(dataObject, userId);
+        requestToService.sendRequest(flow_manager_path , 'post', body).then(data => {
 
-        let dataObject = JSON.parse(data);
-        messagesManager.handleReponseFromServer(dataObject, userId);
-
+            let dataObject = JSON.parse(data);
+            messagesManager.handleReponseFromServer(dataObject, userId);
     }).catch(error => {
-        res.end();
         let errorMessage = '';
         if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
             errorMessage = "interfaceCommunicationError";
@@ -114,6 +128,39 @@ messagesManager.sendRequestToServer = function (userId, res, language, userText,
         console.info(errorMessage);
     });
 };
+
+
+//old, good
+// messagesManager.sendRequestToServer = function (userId, res, language, userText, cardType='text', cardValue = null) {
+//
+//     let body = {
+//         type: 'message',
+//         organization : organizationId,
+//         sessionId : userId,
+//         language : language,
+//         text : userText,
+//         cardType : cardType,
+//         value: cardValue
+//     }
+//
+//     console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
+//
+//     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
+//
+//         let dataObject = JSON.parse(data);
+//         messagesManager.handleReponseFromServer(dataObject, userId);
+//
+//     }).catch(error => {
+//         let errorMessage = '';
+//         if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
+//             errorMessage = "interfaceCommunicationError";
+//         }
+//         else {
+//             errorMessage = error.body;
+//         }
+//         console.info(errorMessage);
+//     });
+// };
 
 messagesManager.handleReponseFromServer = function(dataObject, userId) {
     //let dataObject = JSON.parse(data);
@@ -205,12 +252,10 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                 userId: userId,
                 message: message
             }).then((response) => {
-                    //res.end();
                     console.log('sendMessage by smooch - succeeded:\n');
                     return resolve();
                 },
                 (error) => {
-                    //res.end();
                     console.log('sendMessage by smooch - failed:\n');
                     console.log(JSON.stringify(error, null, 4));
                     return reject(error);

@@ -5,7 +5,7 @@ const messagesManager = require('./messagesManager');
 
 router.route('/sendMessageToClient')
     .post(function (req, res) {
-        console.log('sendResponse');
+        console.log('sendMessageToClient');
         messagesManager.handleReponseFromServer(req.body);
         res.json('ok');
     });
