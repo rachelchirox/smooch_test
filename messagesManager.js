@@ -47,7 +47,6 @@ messagesManager.handleWebhook = function (req, res) {
 };
 
 messagesManager.handleMessagesFromClient = function(req, res) {
-        console.log('111');
         const messages = req.body.messages.reduce((prev, current) => {
             if (current.role === 'appUser') {
                 prev.push(current);
@@ -55,15 +54,14 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             return prev;
         }, []);
 
-    console.log('222');
         if (messages.length === 0) {
             return res.end();
         }
-    console.log('333');
+
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
-    console.log('444' + userId);
-        let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+    console.log('444 ' + userId);
+        let language = req.body.appUser.clients && req.body.appUser.clients[0].info && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
         language = 'he';
 
     console.log('555');
