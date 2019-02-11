@@ -159,10 +159,16 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                     console.log('btn: ' + JSON.stringify(btn, null, 4));
                     actions.push({
                         text: btn.str,
-                        type: 'postback',
+                        type: 'reply',
                         payload: btn.value + '_',
                         metadata: {cardType: btn.type, cardValue: btn.value}
                     });
+                    // actions.push({
+                    //     text: btn.str,
+                    //     type: 'postback',
+                    //     payload: btn.value + '_',
+                    //     metadata: {cardType: btn.type, cardValue: btn.value}
+                    // });
                 });
 
                 console.log('actions: ' + actions);
