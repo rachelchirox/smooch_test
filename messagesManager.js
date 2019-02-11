@@ -204,23 +204,22 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                 let actions = [];
                 action.payload.chats.forEach(function (btn) {
                     console.log('btn: ' + JSON.stringify(btn, null, 4));
-                    actions.push({
-                        text: btn.str,
-                        type: 'reply',
-                        payload: btn.value + '_',
-                        metadata: {cardType: btn.type, cardValue: btn.value}
-                    });
                     // actions.push({
                     //     text: btn.str,
                     //     type: 'postback',
                     //     payload: btn.value + '_',
                     //     metadata: {cardType: btn.type, cardValue: btn.value}
                     // });
+                    actions.push({
+                        title: btn.str,
+                        actions:[{type: 'postback',
+                            payload: btn.value + '_',
+                            metadata: {cardType: btn.type, cardValue: btn.value}}],
+                        });
                 });
 
                 console.log('actions: ' + actions);
                 messageData = messagesManager.createMessageCards(actions);
-
             }
             else {
                 messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
@@ -282,8 +281,9 @@ messagesManager.createMessageText = function(text){
 messagesManager.createMessageCards = function(actions){
     let messageData = {
         role: 'appMaker',
-        type: 'text',
-        actions: actions
+        type: 'list',
+        items:items
+
     };
     return messageData;
 }
