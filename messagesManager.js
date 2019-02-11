@@ -36,7 +36,9 @@ messagesManager.handleWebhook = function (req, res) {
         }
     }
     catch (err) {
-        console.log('user: ' + req.body.appUser.userId || req.body.appUser._id);
+        //console.log('user: ' + req.body.appUser.userId || req.body.appUser._id);
+        console.log('11req: ' + JSON.stringify(req.body, null, 4));
+        console.log('11res: ' + JSON.stringify(res.body, null, 4));
         console.log('EXCEPTION - Failed on messagesManager.handleWebhook,\nerror:' + JSON.stringify(err.body, null, 4));
     }
     finally {
