@@ -282,7 +282,7 @@ messagesManager.createMessageCards = function(actions){
     let messageData = {
         role: 'appMaker',
         type: 'list',
-        items:items
+        items:actions
 
     };
     return messageData;
