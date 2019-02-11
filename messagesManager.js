@@ -211,8 +211,10 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                     //     metadata: {cardType: btn.type, cardValue: btn.value}
                     // });
                     actions.push({
-                        title: btn.str,
-                        actions:[{type: 'postback',
+                        title: 'required. what write here',
+                        actions:[{
+                            text: btn.str,
+                            type: 'postback',
                             payload: btn.value + '_',
                             metadata: {cardType: btn.type, cardValue: btn.value}}],
                         });
