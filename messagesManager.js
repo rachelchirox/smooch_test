@@ -205,6 +205,7 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
             let messageData = null;
             if (action.payload.chats.constructor === Array) {
                 console.log('Array');
+                let items = [];
                 let actions = [];
                 action.payload.chats.forEach(function (btn) {
                     console.log('btn: ' + JSON.stringify(btn, null, 4));
@@ -230,15 +231,23 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                             payload: btn.value + '_',
                             metadata: {cardType: btn.type, cardValue: btn.value}
                         });
+
+                    // items.push({
+                    //     title: 'which title..',
+                    //     actions: [{
+                    //         text: btn.str,
+                    //         type: 'postback',
+                    //         payload: btn.value + '_',
+                    //         metadata: {cardType: btn.type, cardValue: btn.value}
+                    //     }]
+                    // });
+
+
                 });
 
-                let items = [{
-                    title: 'which title..',
-                    actions: actions
-                }];
 
                 console.log('actions: ' + actions);
-                messageData = messagesManager.createMessageCards(items);
+                messageData = messagesManager.createMessageCards(actions);
             }
             else {
                 messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
@@ -300,8 +309,9 @@ messagesManager.createMessageText = function(text){
 messagesManager.createMessageCards = function(items){
     let messageData = {
         role: 'appMaker',
-        type: 'list',
-        items:items
+        type: 'text',
+        text: 'what',
+        actions:items
 
     };
     return messageData;
