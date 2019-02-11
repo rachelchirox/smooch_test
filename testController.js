@@ -3,7 +3,7 @@ const express = require('express'),
     router = express.Router();
 const messagesManager = require('./messagesManager');
 
-router.route('/sendResponse')
+router.route('/sendMessageToClient')
     .post(function (req, res) {
         console.log('sendResponse');
         messagesManager.handleReponseFromServer(req.body);

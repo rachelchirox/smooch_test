@@ -71,6 +71,41 @@ const smoochCore = new SmoochCore({
 
 messagesManager.setSmoochCore(smoochCore);
 
+//works!
+app.post('/webhook', function(req, res, next) {
+    let currentOrganizationId = req.query.organizationId;
+    messagesManager.handleWebhook(req, res);
+    // const trigger = req.body.trigger;
+    // //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
+    // switch (trigger) {
+    //     case 'message:appUser':
+    //         //console.log('webhook.message:appUser' + );
+    //         console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
+    //         //handleMessages2(req, res);
+    //         handleMessages_byFM(req, res);
+    //
+    //         //handleMessages(req, res);
+    //         break;
+    //
+    //     case 'postback':
+    //         console.log('webhook.postback');
+    //         handlePostback(req, res);
+    //         break;
+    //
+    //     default:
+    //         console.log('Ignoring unknown webhook trigger:', trigger);
+    //         console.log('details:\n', JSON.stringify(req.body, null, 4));
+    //         res.end();
+    // }
+});
+
+var server = app.listen(process.env.PORT || 8000, function() {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Smooch Bot listening at http://%s:%s', host, port);
+});
+
 // Create a webhook if one doesn't already exist
 //if (process.env.SERVICE_URL) {
 //     const target = "https://racheltest.herokuapp.com" + '/webhook';//process.env.SERVICE_URL.replace(/\/$/, '') + '/webhook';
@@ -610,33 +645,8 @@ app.post('/appuser:message',(req, res) => {
     console.log(JSON.stringify(req.body, null, 4));
 });
 
-//works!
-app.post('/webhook', function(req, res, next) {
-    let currentOrganizationId = req.query.organizationId;
-    messagesManager.handleWebhook(req, res);
-    // const trigger = req.body.trigger;
-    // //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
-    // switch (trigger) {
-    //     case 'message:appUser':
-    //         //console.log('webhook.message:appUser' + );
-    //         console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
-    //         //handleMessages2(req, res);
-    //         handleMessages_byFM(req, res);
-    //
-    //         //handleMessages(req, res);
-    //         break;
-    //
-    //     case 'postback':
-    //         console.log('webhook.postback');
-    //         handlePostback(req, res);
-    //         break;
-    //
-    //     default:
-    //         console.log('Ignoring unknown webhook trigger:', trigger);
-    //         console.log('details:\n', JSON.stringify(req.body, null, 4));
-    //         res.end();
-    // }
-});
+
+
 
 //not arrived here
 app.post('/messages', function(req, res) {
@@ -661,9 +671,3 @@ app.post('/messages', function(req, res) {
     }
 });
 
-var server = app.listen(process.env.PORT || 8000, function() {
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log('Smooch Bot listening at http://%s:%s', host, port);
-});
