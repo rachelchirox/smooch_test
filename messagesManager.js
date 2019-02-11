@@ -60,18 +60,15 @@ messagesManager.handleMessagesFromClient = function(req, res) {
 
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
-    console.log('444 ' + userId);
         let language = req.body.appUser.clients && req.body.appUser.clients[0].info && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
         language = 'he';
 
-    console.log('555');
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
             userText = messages[0].mediaUrl;
             console.log('666');
         }
 
-    console.log('777');
         messagesManager.sendRequestToServer('sendMessageToBot', userId, res, language, userText)
     };
 
@@ -218,18 +215,30 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                     //     metadata: {cardType: btn.type, cardValue: btn.value}
                     // });
 
+                    // actions.push({
+                    //     title: 'required. what write here',
+                    //     actions:[{
+                    //         text: btn.str,
+                    //         type: 'postback',
+                    //         payload: btn.value + '_',
+                    //         metadata: {cardType: btn.type, cardValue: btn.value}}],
+                    //     });
+
                     actions.push({
-                        title: 'required. what write here',
-                        actions:[{
                             text: btn.str,
                             type: 'postback',
                             payload: btn.value + '_',
-                            metadata: {cardType: btn.type, cardValue: btn.value}}],
+                            metadata: {cardType: btn.type, cardValue: btn.value}
                         });
                 });
 
+                let items = [{
+                    title: 'which title..',
+                    actions: actions
+                }];
+
                 console.log('actions: ' + actions);
-                messageData = messagesManager.createMessageCards(actions);
+                messageData = messagesManager.createMessageCards(items);
             }
             else {
                 messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
@@ -288,11 +297,11 @@ messagesManager.createMessageText = function(text){
 
 }
 
-messagesManager.createMessageCards = function(actions){
+messagesManager.createMessageCards = function(items){
     let messageData = {
         role: 'appMaker',
         type: 'list',
-        items:actions
+        items:items
 
     };
     return messageData;
