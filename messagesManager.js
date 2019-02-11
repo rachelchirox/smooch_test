@@ -210,6 +210,7 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                     //     payload: btn.value + '_',
                     //     metadata: {cardType: btn.type, cardValue: btn.value}
                     // });
+
                     actions.push({
                         title: 'required. what write here',
                         actions:[{
