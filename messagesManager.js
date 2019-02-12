@@ -178,21 +178,21 @@ messagesManager.handlePostback = function(req, res) {
 // };
 
 messagesManager.handleResponseFromServer = function(dataObject, userId) {
-
-
     //let dataObject = JSON.parse(data);
     console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
 
+    let platform = null;
     let foundItem = messagesManager.clientPlatformsToSessions.find(item => item.sessionId == userId);
     if (!foundItem) {
         console.log('problem: messagesManager.clientPlatformsToSessions not contains the sessionId ' + userId);
     }
     else {
-        if (foundItem.clientPlatform == "messenger") {//facebook
-            console.log('parse to facebook');
-        }
+        platform = foundItem.clientPlatform;
+        // if (foundItem.clientPlatform == "messenger") {//facebook
+        //     console.log('parse to facebook');
+        //     platform = 'messenger';
+        // }
     }
-
 
     // for (let action of dataObject.actions) {
     //     if (action.type === 'addBotText') {
@@ -221,12 +221,38 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
     //     }
     // }
 
-    //for (let action of dataObject.actions) {
-    if (dataObject.actions && dataObject.actions.length){
+    for (let action of dataObject.actions) {
+        let messageData = null;
+        if (platform == 'messenger') {
+            messageData = messagesManager.createMessageData_Facebook(dataObject);
+        }
+        else {
+            messageData = messagesManager.createMessageData(dataObject);
+        }
+
+        if (messageData) {
+            messagesManager.sendMessageToClient(userId, messageData).then((response) => {
+
+                //let leftItems = dataObject.actions.shift();
+                let leftItems = dataObject.actions.slice(1, dataObject.actions.length);
+
+                console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
+                if (leftItems.length > 0) {
+
+                    messagesManager.handleResponseFromServer({actions: leftItems}, userId);
+                }
+            });
+        }
+    }
+};
+
+messagesManager.createMessageData = function(dataObject) {
+    let messageData = null;
+    if (dataObject.actions && dataObject.actions.length) {
         let action = dataObject.actions[0];
         if (action.type === 'addBotText') {
             console.log('addBotText');
-            let messageData = null;
+
             if (action.payload.chats.constructor === Array) {
                 console.log('Array');
                 let items = [];
@@ -250,11 +276,11 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
                     //     });
 
                     actions.push({
-                            text: btn.str,
-                            type: 'postback',
-                            payload: btn.value + '_',
-                            metadata: {cardType: btn.type, cardValue: btn.value}
-                        });
+                        text: btn.str,
+                        type: 'postback',
+                        payload: btn.value + '_',
+                        metadata: {cardType: btn.type, cardValue: btn.value}
+                    });
 
                     // actions.push({
                     //     text: btn.str,
@@ -266,6 +292,73 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
                     // });
 
 
+                    // items.push({
+                    //     title: 'which title..',
+                    //     actions: [{
+                    //         text: btn.str,
+                    //         type: 'postback',
+                    //         payload: btn.value + '_',
+                    //         metadata: {cardType: btn.type, cardValue: btn.value}
+                    //     }]
+                    // });
+                });
+
+                console.log('actions: ' + actions);
+                messageData = messagesManager.createMessageCards(actions);
+            }
+            else {
+                messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
+            }
+            return messageData;
+        }
+    }
+}
+
+messagesManager.createMessageData_Facebook = function(dataObject) {
+    let messageData = null;
+    if (dataObject.actions && dataObject.actions.length) {
+        let action = dataObject.actions[0];
+        if (action.type === 'addBotText') {
+            console.log('addBotText');
+
+            if (action.payload.chats.constructor === Array) {
+                console.log('Array');
+                let items = [];
+                let actions = [];
+                action.payload.chats.forEach(function (btn) {
+                    console.log('btn: ' + JSON.stringify(btn, null, 4));
+                    // actions.push({
+                    //     text: btn.str,
+                    //     type: 'postback',
+                    //     payload: btn.value + '_',
+                    //     metadata: {cardType: btn.type, cardValue: btn.value}
+                    // });
+
+                    // actions.push({
+                    //     title: 'required. what write here',
+                    //     actions:[{
+                    //         text: btn.str,
+                    //         type: 'postback',
+                    //         payload: btn.value + '_',
+                    //         metadata: {cardType: btn.type, cardValue: btn.value}}],
+                    //     });
+
+                    actions.push({
+                        text: btn.str,
+                        type: 'postback',
+                        payload: btn.value + '_',
+                        metadata: {cardType: btn.type, cardValue: btn.value}
+                    });
+
+                    // actions.push({
+                    //     text: btn.str,
+                    //     type: 'link',
+                    //     default: true,
+                    //     uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&language=he' + btn.value,
+                    //     payload: btn.value + '_',
+                    //     metadata: {cardType: btn.type, cardValue: btn.value, x:1}
+                    // });
+
 
                     // items.push({
                     //     title: 'which title..',
@@ -276,10 +369,7 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
                     //         metadata: {cardType: btn.type, cardValue: btn.value}
                     //     }]
                     // });
-
-
                 });
-
 
                 console.log('actions: ' + actions);
                 messageData = messagesManager.createMessageCards(actions);
@@ -287,23 +377,10 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
             else {
                 messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
             }
-
-            messagesManager.sendMessageToClient(userId, messageData).then((response)=>{
-
-                //let leftItems = dataObject.actions.shift();
-                let leftItems = dataObject.actions.slice(1,dataObject.actions.length);
-
-                console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
-                if (leftItems.length > 0) {
-
-                    messagesManager.handleResponseFromServer({actions : leftItems}, userId);
-                }
-             });
+            return messageData;
         }
     }
-};
-
-
+}
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
     return new Promise((resolve, reject) => {
