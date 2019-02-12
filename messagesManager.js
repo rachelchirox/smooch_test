@@ -238,7 +238,7 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                         default: true,
                         uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&test=' + btn.value,
                         payload: btn.value + '_',
-                        metadata: {cardType: btn.type, cardValue: btn.value}
+                        metadata: {cardType: btn.type, cardValue: btn.value, x:1}
                     });
 
 
