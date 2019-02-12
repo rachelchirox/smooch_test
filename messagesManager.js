@@ -225,21 +225,21 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                     //         metadata: {cardType: btn.type, cardValue: btn.value}}],
                     //     });
 
-                    // actions.push({
-                    //         text: btn.str,
-                    //         type: 'postback',
-                    //         payload: btn.value + '_',
-                    //         metadata: {cardType: btn.type, cardValue: btn.value}
-                    //     });
-
                     actions.push({
-                        text: btn.str,
-                        type: 'link',
-                        default: true,
-                        uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&test=' + btn.value,
-                        payload: btn.value + '_',
-                        metadata: {cardType: btn.type, cardValue: btn.value, x:1}
-                    });
+                            text: btn.str,
+                            type: 'postback',
+                            payload: btn.value + '_',
+                            metadata: {cardType: btn.type, cardValue: btn.value}
+                        });
+
+                    // actions.push({
+                    //     text: btn.str,
+                    //     type: 'link',
+                    //     default: true,
+                    //     uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&test=' + btn.value,
+                    //     payload: btn.value + '_',
+                    //     metadata: {cardType: btn.type, cardValue: btn.value, x:1}
+                    // });
 
 
 
@@ -317,26 +317,25 @@ messagesManager.createMessageText = function(text){
 
 }
 
+
+messagesManager.createMessageCards = function(actions){
+    let messageData = {
+        role: 'appMaker',
+        type: 'text',
+        text: '------',
+        actions: actions
+    };
+    return messageData;
+};
+
 // messagesManager.createMessageCards = function(items){
 //     let messageData = {
 //         role: 'appMaker',
-//         type: 'text',
-//         text: 'what',
+//         type: 'list',
 //         actions:items
 //
 //     };
 //     return messageData;
 // }
-
-messagesManager.createMessageCards = function(items){
-    let messageData = {
-        role: 'appMaker',
-        type: 'text',
-        text: 'what',
-        actions:items
-
-    };
-    return messageData;
-}
 
 module.exports = messagesManager;
