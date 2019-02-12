@@ -1,9 +1,7 @@
 {
   "flow_manager_path": "https://flow-manager.membitbot.com/flow-manager/request",
-  "organizationId" : "5a840642b1c48e11c07fbea2",
   "appId":"5c6007ce383ee5002262e55d",
   "kid": "app_5c60105cce275b0022211e10",
-  "smoochSecret": "nXyhGLHFfMvOyOG-Fovw7rHkKkuD193LF7ROKKc3jJ7apscQcvo1TvtmH_zTBnCkdTyN82SPgrUM08i7sZXSeQ"
-
-
+  "smoochSecret": "nXyhGLHFfMvOyOG-Fovw7rHkKkuD193LF7ROKKc3jJ7apscQcvo1TvtmH_zTBnCkdTyN82SPgrUM08i7sZXSeQ",
+  "defaultLanguage":"he"
 }

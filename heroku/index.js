@@ -2,7 +2,6 @@
 
 const config = require('config'),
     flow_manager_path = config.get('flow_manager_path'),
-    organizationId = config.get('organizationId'),
     appId = config.get('appId');
 
 const smoochBot = require('smooch-bot');
@@ -73,7 +72,8 @@ messagesManager.setSmoochCore(smoochCore);
 
 //works!
 app.post('/webhook', function(req, res, next) {
-    let currentOrganizationId = req.query.organizationId;
+    // let currentOrganizationId = req.query.organizationId;
+    // let currentLanguage = req.query.language;
     messagesManager.handleWebhook(req, res);
     // const trigger = req.body.trigger;
     // //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));

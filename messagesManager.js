@@ -1,8 +1,8 @@
 "use strict";
 const config = require('config'),
     flow_manager_path = config.get('flow_manager_path'),
-    organizationId = config.get('organizationId'),
-    appId = config.get('appId');
+    appId = config.get('appId'),
+    defaultLanguage = config.get('defaultLanguage');
 
 const requestToService = require('./requestToService');
 let messagesManager = function () {
@@ -15,6 +15,8 @@ messagesManager.setSmoochCore = function (smoochCore){
 
 messagesManager.handleWebhook = function (req, res) {
     try {
+
+
         const trigger = req.body.trigger;
         console.log('webhook trigger: ', trigger);
         switch (trigger) {
@@ -96,8 +98,11 @@ messagesManager.handlePostback = function(req, res) {
 
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
-        let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
-        language = 'he';
+        let organizationId = req.query.organizationId;
+        let language = req.query.language;
+        if (!language) {
+            language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : defaultLanguage;
+        }
 
         let clientPlatform = req.body.appUser.clients && req.body.appUser.clients[0].platform;
 
@@ -255,7 +260,7 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
                     //     text: btn.str,
                     //     type: 'link',
                     //     default: true,
-                    //     uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&test=' + btn.value,
+                    //     uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&language=he' + btn.value,
                     //     payload: btn.value + '_',
                     //     metadata: {cardType: btn.type, cardValue: btn.value, x:1}
                     // });
