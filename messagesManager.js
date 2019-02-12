@@ -69,7 +69,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             console.log('666');
         }
 
-        messagesManager.sendRequestToServer('sendMessageToBot', userId, res, language, userText)
+        messagesManager.sendRequestToServer('sendMessageToFlow', userId, res, language, userText)
     };
 
 messagesManager.handlePostback = function(req, res) {
@@ -86,7 +86,7 @@ messagesManager.handlePostback = function(req, res) {
 
          let cardType = postback.action.metadata.cardType ? postback.action.metadata.cardType : 'text';
          let cardValue = postback.action.metadata.cardValue ? postback.action.metadata.cardValue : null;
-         messagesManager.sendRequestToServer('sendMessageToBot', userId, res, language, postback.action.text, cardType, cardValue);
+         messagesManager.sendRequestToServer('sendMessageToFlow', userId, res, language, postback.action.text, cardType, cardValue);
      };
 
     messagesManager.handleConversationStart = function(req, res) {
