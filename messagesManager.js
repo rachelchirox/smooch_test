@@ -182,9 +182,10 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
     if (!foundItem) {
         console.log('problem: messagesManager.clientPlatformsToSessions not contains the sessionId ' + userId);
     }
-
-    if (foundItem.clientPlatform == "messenger") {//facebook
-        console.log('parse to facebook');
+    else {
+        if (foundItem.clientPlatform == "messenger") {//facebook
+            console.log('parse to facebook');
+        }
     }
 
 
