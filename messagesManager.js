@@ -58,10 +58,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             return res.end();
         }
 
-        const userId = req.body.appUser.userId || req.body.appUser._id;
 
-        let language = req.body.appUser.clients && req.body.appUser.clients[0].info && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
-        language = 'he';
 
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
@@ -69,7 +66,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             console.log('666');
         }
 
-        messagesManager.sendRequestToServer('sendMessageToFlow', userId, res, language, userText)
+        messagesManager.sendRequestToServer('sendMessageToFlow', req, userText)
     };
 
 messagesManager.handlePostback = function(req, res) {
@@ -80,27 +77,36 @@ messagesManager.handlePostback = function(req, res) {
              res.end();
          }
 
-         const userId = req.body.appUser.userId || req.body.appUser._id;
-         let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
-         language = 'he';
-
          let cardType = postback.action.metadata.cardType ? postback.action.metadata.cardType : 'text';
          let cardValue = postback.action.metadata.cardValue ? postback.action.metadata.cardValue : null;
-         messagesManager.sendRequestToServer('sendMessageToFlow', userId, res, language, postback.action.text, cardType, cardValue);
+         messagesManager.sendRequestToServer('sendMessageToFlow', req, postback.action.text, cardType, cardValue);
      };
 
     messagesManager.handleConversationStart = function(req, res) {
         console.log('handleConversationStart:\n', JSON.stringify(req.body, null, 4));
+
+        messagesManager.sendRequestToServer('initSession', req, '')
+    };
+
+    messagesManager.clientPlatformsToSessions = [];
+
+    messagesManager.sendRequestToServer = function (actionName, req, userText, cardType='text', cardValue = null) {
+
+        console.log('888');
+
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
         let language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
         language = 'he';
-        messagesManager.sendRequestToServer('initSession', userId, res, language, '')
-    };
 
-    messagesManager.sendRequestToServer = function (actionName, userId, res, language, userText, cardType='text', cardValue = null) {
+        let clientPlatform = req.body.appUser.clients && req.body.appUser.clients[0].platform;
 
-        console.log('888');
+        //TODO: not good enough for multi clients to the same user
+        let foundItem = messagesManager.clientPlatformsToSessions.find(item => item.sessionId == userId);
+        if (!foundItem) {
+            messagesManager.clientPlatformsToSessions.push({sessionId: userId, clientPlatform: clientPlatform});
+        }
+
     let body = {
         type : 'message',
         organization : organizationId,
@@ -116,11 +122,11 @@ messagesManager.handlePostback = function(req, res) {
     // requestToService.sendRequest(flow_manager_path + '/'+ actionName, 'post', body).then(data => {
     //
     //     let dataObject = JSON.parse(data);
-    //     messagesManager.handleReponseFromServer(dataObject, userId);
+    //     messagesManager.handleResponseFromServer(dataObject, userId);
         requestToService.sendRequest(flow_manager_path , 'post', body).then(data => {
 
             let dataObject = JSON.parse(data);
-            messagesManager.handleReponseFromServer(dataObject, userId);
+            messagesManager.handleResponseFromServer(dataObject, userId);
     }).catch(error => {
         let errorMessage = '';
         if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
@@ -152,7 +158,7 @@ messagesManager.handlePostback = function(req, res) {
 //     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
 //
 //         let dataObject = JSON.parse(data);
-//         messagesManager.handleReponseFromServer(dataObject, userId);
+//         messagesManager.handleResponseFromServer(dataObject, userId);
 //
 //     }).catch(error => {
 //         let errorMessage = '';
@@ -166,9 +172,21 @@ messagesManager.handlePostback = function(req, res) {
 //     });
 // };
 
-messagesManager.handleReponseFromServer = function(dataObject, userId) {
+messagesManager.handleResponseFromServer = function(dataObject, userId) {
+
+
     //let dataObject = JSON.parse(data);
     console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
+
+    let foundItem = messagesManager.clientPlatformsToSessions.find(item => item.sessionId == userId);
+    if (!foundItem) {
+        console.log('problem: messagesManager.clientPlatformsToSessions not contains the sessionId ' + userId);
+    }
+
+    if (foundItem.clientPlatform == "messanger") {//facebook
+        console.log('parse to facebook');
+    }
+
 
     // for (let action of dataObject.actions) {
     //     if (action.type === 'addBotText') {
@@ -272,7 +290,7 @@ messagesManager.handleReponseFromServer = function(dataObject, userId) {
                 console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
                 if (leftItems.length > 0) {
 
-                    messagesManager.handleReponseFromServer({actions : leftItems}, userId);
+                    messagesManager.handleResponseFromServer({actions : leftItems}, userId);
                 }
              });
         }

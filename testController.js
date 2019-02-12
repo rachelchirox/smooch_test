@@ -9,7 +9,7 @@ router.route('/sendMessageToClient')
         let userId = req.body.sessionId;
         //let clientType = req.body.clientType;//not supposed to send to this layer, remove it later.
         let dataObject = req.body.content;
-        messagesManager.handleReponseFromServer(dataObject, userId);
+        messagesManager.handleResponseFromServer(dataObject, userId);
         res.json('ok');
     });
 
