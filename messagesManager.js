@@ -327,52 +327,28 @@ messagesManager.createMessageData_Facebook = function(dataObject) {
                 let actions = [];
                 action.payload.chats.forEach(function (btn) {
                     console.log('btn: ' + JSON.stringify(btn, null, 4));
-                    // actions.push({
-                    //     text: btn.str,
-                    //     type: 'postback',
-                    //     payload: btn.value + '_',
-                    //     metadata: {cardType: btn.type, cardValue: btn.value}
-                    // });
 
-                    // actions.push({
-                    //     title: 'required. what write here',
-                    //     actions:[{
-                    //         text: btn.str,
-                    //         type: 'postback',
-                    //         payload: btn.value + '_',
-                    //         metadata: {cardType: btn.type, cardValue: btn.value}}],
-                    //     });
-
-                    actions.push({
-                        text: btn.str,
-                        type: 'postback',
-                        payload: btn.value + '_',
-                        metadata: {cardType: btn.type, cardValue: btn.value}
+                    items.push({
+                        title: btn.str,
+                        actions: [{
+                            text: btn.str,
+                            type: 'postback',
+                            payload: btn.value + '_',
+                            metadata: {cardType: btn.type, cardValue: btn.value}
+                        }]
                     });
 
-                    // actions.push({
-                    //     text: btn.str,
-                    //     type: 'link',
-                    //     default: true,
-                    //     uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&language=he' + btn.value,
-                    //     payload: btn.value + '_',
-                    //     metadata: {cardType: btn.type, cardValue: btn.value, x:1}
-                    // });
 
-
-                    // items.push({
-                    //     title: 'which title..',
-                    //     actions: [{
-                    //         text: btn.str,
-                    //         type: 'postback',
-                    //         payload: btn.value + '_',
-                    //         metadata: {cardType: btn.type, cardValue: btn.value}
-                    //     }]
-                    // });
                 });
 
                 console.log('actions: ' + actions);
-                messageData = messagesManager.createMessageCards(actions);
+                //messageData = messagesManager.createMessageCarousel(actions);
+                messageData = {
+                    role: 'appMaker',
+                    type: 'carousel',
+                    items: items
+                };
+                //return messageData;
             }
             else {
                 messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
@@ -425,6 +401,15 @@ messagesManager.createMessageCards = function(actions){
         type: 'text',
         text: '------',
         actions: actions
+    };
+    return messageData;
+};
+
+messagesManager.createMessageCarousel = function(items){
+    let messageData = {
+        role: 'appMaker',
+        type: 'carousel',
+        items: items
     };
     return messageData;
 };
