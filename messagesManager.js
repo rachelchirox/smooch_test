@@ -40,7 +40,6 @@ messagesManager.handleWebhook = function (req, res) {
     catch (err) {
         console.log('user: ' + req.body.appUser.userId || req.body.appUser._id);
         console.log('11req: ' + JSON.stringify(req.body, null, 4));
-        console.log('11res: ' + JSON.stringify(res.body, null, 4));
         console.log('EXCEPTION - Failed on messagesManager.handleWebhook,\nerror:' + JSON.stringify(err));
     }
     finally {
@@ -49,18 +48,19 @@ messagesManager.handleWebhook = function (req, res) {
 };
 
 messagesManager.handleMessagesFromClient = function(req, res) {
+    console.log('1***');
         const messages = req.body.messages.reduce((prev, current) => {
             if (current.role === 'appUser') {
                 prev.push(current);
             }
             return prev;
         }, []);
-
+    console.log('2***');
         if (messages.length === 0) {
             return res.end();
         }
 
-
+    console.log('3***');
 
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
@@ -68,6 +68,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             console.log('666');
         }
 
+    console.log('4***');
         messagesManager.sendRequestToServer('sendMessageToFlow', req, userText)
     };
 
