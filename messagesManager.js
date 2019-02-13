@@ -221,32 +221,34 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
     //     }
     // }
 
-    for (let action of dataObject.actions) {
-        let messageData = null;
-        if (dataObject.actions && dataObject.actions.length) {
-            let action = dataObject.actions[0];
-            if (platform == 'messenger') {
-                messageData = messagesManager.createMessageData_Facebook(action);
-            }
-            else {
-                messageData = messagesManager.createMessageData(action);
-            }
 
-            if (messageData) {
-                messagesManager.sendMessageToClient(userId, messageData).then((response) => {
+    let messageData = null;
+    if (dataObject.actions && dataObject.actions.length) {
+        let action = dataObject.actions[0];
+        if (platform == 'messenger') {
+            messageData = messagesManager.createMessageData_Facebook(action);
+        }
+        else {
+            messageData = messagesManager.createMessageData(action);
+        }
 
-                    //let leftItems = dataObject.actions.shift();
-                    let leftItems = dataObject.actions.slice(1, dataObject.actions.length);
+        let leftItems = dataObject.actions.slice(1, dataObject.actions.length);
+        console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
 
-                    console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
-                    if (leftItems.length > 0) {
-
-                        messagesManager.handleResponseFromServer({actions: leftItems}, userId);
-                    }
-                });
+        if (messageData) {
+            messagesManager.sendMessageToClient(userId, messageData).then((response) => {
+                if (leftItems.length > 0) {
+                    messagesManager.handleResponseFromServer({actions: leftItems}, userId);
+                }
+            });
+        }
+        else {
+            if (leftItems.length > 0) {
+                messagesManager.handleResponseFromServer({actions: leftItems}, userId);
             }
         }
     }
+
 };
 
 messagesManager.createMessageData = function(action) {
