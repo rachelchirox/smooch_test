@@ -3,6 +3,7 @@ const config = require('config'),
     flow_manager_path = config.get('flow_manager_path'),
     appId = config.get('appId'),
     defaultLanguage = config.get('defaultLanguage');
+const EventEmitter = require('events');
 
 const requestToService = require('./requestToService');
 let messagesManager = function () {
@@ -15,7 +16,10 @@ messagesManager.setSmoochCore = function (smoochCore){
     messagesManager.smoochCore = smoochCore;
 };
 
+class MyEmitter extends EventEmitter {}
+
 messagesManager.myEmitter = new MyEmitter();
+
 
 messagesManager.handleWebhook = function (req, res) {
     try {
@@ -336,9 +340,8 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
     });
 };
 
-const EventEmitter = require('events');
-class MyEmitter extends EventEmitter {}
-//const myEmitter = new MyEmitter();
+
+
 
 
 
