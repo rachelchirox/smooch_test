@@ -8,7 +8,9 @@ const requestToService = require('./requestToService');
 let messagesManager = function () {
 };
 
-let smoochCore = null;
+messagesManager.clientPlatformsToSessions = [];
+messagesManager.smoochCore = null;
+
 messagesManager.setSmoochCore = function (smoochCore){
     messagesManager.smoochCore = smoochCore;
 }
@@ -48,19 +50,16 @@ messagesManager.handleWebhook = function (req, res) {
 };
 
 messagesManager.handleMessagesFromClient = function(req, res) {
-    console.log('1***');
         const messages = req.body.messages.reduce((prev, current) => {
             if (current.role === 'appUser') {
                 prev.push(current);
             }
             return prev;
         }, []);
-    console.log('2***');
+
         if (messages.length === 0) {
             return res.end();
         }
-
-    console.log('3***');
 
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
@@ -68,11 +67,11 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             console.log('666');
         }
 
-    console.log('4***');
-        messagesManager.sendRequestToServer('sendMessageToFlow', req, userText)
+        console.log('4***');
+        messagesManager.sendRequestToServer('sendMessageToFlow', req, userText);
     };
 
-messagesManager.handlePostback = function(req, res) {
+    messagesManager.handlePostback = function(req, res) {
          console.log('handlePostback:\n', JSON.stringify(req.body, null, 4));
 
          const postback = req.body.postbacks[0];
@@ -91,11 +90,10 @@ messagesManager.handlePostback = function(req, res) {
         messagesManager.sendRequestToServer('initSession', req, '')
     };
 
-    messagesManager.clientPlatformsToSessions = [];
-
     messagesManager.sendRequestToServer = function (actionName, req, userText, cardType='text', cardValue = null) {
 
-        console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
+        console.log('5***');
+        console.log('sendRequest to flow-manager -before:\n', JSON.stringify(req.body, null, 4));
 
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
