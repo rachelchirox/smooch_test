@@ -63,7 +63,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
 
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
-            userText = messages[0].mediaUrl;
+            userText = 'handle: ' + messages[0].mediaUrl;
             console.log('666');
         }
 
@@ -92,7 +92,6 @@ messagesManager.handleMessagesFromClient = function(req, res) {
 
     messagesManager.sendRequestToServer = function (actionName, req, userText, cardType='text', cardValue = null) {
 
-        console.log('5***');
         console.log('sendRequest to flow-manager -before:\n', JSON.stringify(req.body, null, 4));
 
         const userId = req.body.appUser.userId || req.body.appUser._id;
