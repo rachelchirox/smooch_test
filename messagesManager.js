@@ -94,7 +94,7 @@ messagesManager.handlePostback = function(req, res) {
 
     messagesManager.sendRequestToServer = function (actionName, req, userText, cardType='text', cardValue = null) {
 
-        console.log('888');
+        console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
 
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
@@ -112,19 +112,19 @@ messagesManager.handlePostback = function(req, res) {
             messagesManager.clientPlatformsToSessions.push({sessionId: userId, clientPlatform: clientPlatform});
         }
 
-    let body = {
-        type: 'message',
-        organization: organizationId,
-        sessionId: userId,
-        language: language,
-        text: userText,
-        cardType: cardType,
-        value: cardValue
-    };
-    console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
-        requestToService.sendRequest(flow_manager_path , 'post', body).then(data => {
+        let body = {
+            type: 'message',
+            organization: organizationId,
+            sessionId: userId,
+            language: language,
+            text: userText,
+            cardType: cardType,
+            value: cardValue
+        };
+
+        requestToService.sendRequest(flow_manager_path + '/' + actionName , 'post', body).then(data => {
              let dataObject = JSON.parse(data);
-            console.log('reponse from ' + flow_manager_path + ' :' + JSON.stringify(dataObject));
+             console.log('response from ' + flow_manager_path + ' :' + JSON.stringify(dataObject));
             // messagesManager.handleResponseFromServer(dataObject, userId);
     }).catch(error => {
         let errorMessage = '';
