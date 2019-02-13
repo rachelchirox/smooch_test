@@ -223,94 +223,95 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
 
     for (let action of dataObject.actions) {
         let messageData = null;
-        if (platform == 'messenger') {
-            messageData = messagesManager.createMessageData_Facebook(dataObject);
-        }
-        else {
-            messageData = messagesManager.createMessageData(dataObject);
-        }
+        if (dataObject.actions && dataObject.actions.length) {
+            let action = dataObject.actions[0];
+            if (platform == 'messenger') {
+                messageData = messagesManager.createMessageData_Facebook(action);
+            }
+            else {
+                messageData = messagesManager.createMessageData(action);
+            }
 
-        if (messageData) {
-            messagesManager.sendMessageToClient(userId, messageData).then((response) => {
+            if (messageData) {
+                messagesManager.sendMessageToClient(userId, messageData).then((response) => {
 
-                //let leftItems = dataObject.actions.shift();
-                let leftItems = dataObject.actions.slice(1, dataObject.actions.length);
+                    //let leftItems = dataObject.actions.shift();
+                    let leftItems = dataObject.actions.slice(1, dataObject.actions.length);
 
-                console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
-                if (leftItems.length > 0) {
+                    console.log('leftItems: ' + JSON.stringify(leftItems, null, 4));
+                    if (leftItems.length > 0) {
 
-                    messagesManager.handleResponseFromServer({actions: leftItems}, userId);
-                }
-            });
+                        messagesManager.handleResponseFromServer({actions: leftItems}, userId);
+                    }
+                });
+            }
         }
     }
 };
 
-messagesManager.createMessageData = function(dataObject) {
+messagesManager.createMessageData = function(action) {
     let messageData = null;
-    if (dataObject.actions && dataObject.actions.length) {
-        let action = dataObject.actions[0];
-        if (action.type === 'addBotText') {
-            console.log('addBotText');
 
-            if (action.payload.chats.constructor === Array) {
-                console.log('Array');
-                let items = [];
-                let actions = [];
-                action.payload.chats.forEach(function (btn) {
-                    console.log('btn: ' + JSON.stringify(btn, null, 4));
-                    // actions.push({
-                    //     text: btn.str,
-                    //     type: 'postback',
-                    //     payload: btn.value + '_',
-                    //     metadata: {cardType: btn.type, cardValue: btn.value}
-                    // });
+    if (action.type === 'addBotText') {
+        console.log('addBotText');
 
-                    // actions.push({
-                    //     title: 'required. what write here',
-                    //     actions:[{
-                    //         text: btn.str,
-                    //         type: 'postback',
-                    //         payload: btn.value + '_',
-                    //         metadata: {cardType: btn.type, cardValue: btn.value}}],
-                    //     });
+        if (action.payload.chats.constructor === Array) {
+            console.log('Array');
+            let items = [];
+            let actions = [];
+            action.payload.chats.forEach(function (btn) {
+                console.log('btn: ' + JSON.stringify(btn, null, 4));
+                // actions.push({
+                //     text: btn.str,
+                //     type: 'postback',
+                //     payload: btn.value + '_',
+                //     metadata: {cardType: btn.type, cardValue: btn.value}
+                // });
 
-                    actions.push({
-                        text: btn.str,
-                        type: 'postback',
-                        payload: btn.value + '_',
-                        metadata: {cardType: btn.type, cardValue: btn.value}
-                    });
+                // actions.push({
+                //     title: 'required. what write here',
+                //     actions:[{
+                //         text: btn.str,
+                //         type: 'postback',
+                //         payload: btn.value + '_',
+                //         metadata: {cardType: btn.type, cardValue: btn.value}}],
+                //     });
 
-                    // actions.push({
-                    //     text: btn.str,
-                    //     type: 'link',
-                    //     default: true,
-                    //     uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&language=he' + btn.value,
-                    //     payload: btn.value + '_',
-                    //     metadata: {cardType: btn.type, cardValue: btn.value, x:1}
-                    // });
-
-
-                    // items.push({
-                    //     title: 'which title..',
-                    //     actions: [{
-                    //         text: btn.str,
-                    //         type: 'postback',
-                    //         payload: btn.value + '_',
-                    //         metadata: {cardType: btn.type, cardValue: btn.value}
-                    //     }]
-                    // });
+                actions.push({
+                    text: btn.str,
+                    type: 'postback',
+                    payload: btn.value + '_',
+                    metadata: {cardType: btn.type, cardValue: btn.value}
                 });
 
-                console.log('actions: ' + actions);
-                messageData = messagesManager.createMessageCards(actions);
-            }
-            else {
-                messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
-            }
-            return messageData;
+                // actions.push({
+                //     text: btn.str,
+                //     type: 'link',
+                //     default: true,
+                //     uri: 'https://racheltest.herokuapp.com/webhook?organizationId=5a840642b1c48e11c07fbea31&language=he' + btn.value,
+                //     payload: btn.value + '_',
+                //     metadata: {cardType: btn.type, cardValue: btn.value, x:1}
+                // });
+
+
+                // items.push({
+                //     title: 'which title..',
+                //     actions: [{
+                //         text: btn.str,
+                //         type: 'postback',
+                //         payload: btn.value + '_',
+                //         metadata: {cardType: btn.type, cardValue: btn.value}
+                //     }]
+                // });
+            });
+
+            console.log('actions: ' + actions);
+            messageData = messagesManager.createMessageCards(actions);
         }
+        else {
+            messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
+        }
+        return messageData;
     }
 }
 
