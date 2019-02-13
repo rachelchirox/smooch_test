@@ -317,49 +317,47 @@ messagesManager.createMessageData = function(action) {
     }
 }
 
-messagesManager.createMessageData_Facebook = function(dataObject) {
+messagesManager.createMessageData_Facebook = function(action) {
     let messageData = null;
-    if (dataObject.actions && dataObject.actions.length) {
-        let action = dataObject.actions[0];
-        if (action.type === 'addBotText') {
-            console.log('addBotText');
 
-            if (action.payload.chats.constructor === Array) {
-                console.log('Array');
-                let items = [];
-                let actions = [];
-                action.payload.chats.forEach(function (btn) {
-                    console.log('btn: ' + JSON.stringify(btn, null, 4));
+    if (action.type === 'addBotText') {
+        console.log('addBotText');
 
-                    items.push({
-                        title: btn.str,
-                        actions: [{
-                            text: btn.str,
-                            type: 'postback',
-                            payload: btn.value + '_',
-                            metadata: {cardType: btn.type, cardValue: btn.value}
-                        }]
-                    });
+        if (action.payload.chats.constructor === Array) {
+            console.log('Array');
+            let items = [];
+            let actions = [];
+            action.payload.chats.forEach(function (btn) {
+                console.log('btn: ' + JSON.stringify(btn, null, 4));
 
-
+                items.push({
+                    title: btn.str,
+                    actions: [{
+                        text: btn.str,
+                        type: 'postback',
+                        payload: btn.value + '_',
+                        metadata: {cardType: btn.type, cardValue: btn.value}
+                    }]
                 });
 
-                console.log('actions: ' + actions);
-                //messageData = messagesManager.createMessageCarousel(actions);
-                messageData = {
-                    role: 'appMaker',
-                    type: 'carousel',
-                    items: items
-                };
-                //return messageData;
-            }
-            else {
-                messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
-            }
-            return messageData;
+
+            });
+
+            console.log('actions: ' + actions);
+            //messageData = messagesManager.createMessageCarousel(actions);
+            messageData = {
+                role: 'appMaker',
+                type: 'carousel',
+                items: items
+            };
+            //return messageData;
         }
+        else {
+            messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
+        }
+        return messageData;
     }
-}
+};
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
     return new Promise((resolve, reject) => {
