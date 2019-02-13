@@ -13,12 +13,10 @@ messagesManager.smoochCore = null;
 
 messagesManager.setSmoochCore = function (smoochCore){
     messagesManager.smoochCore = smoochCore;
-}
+};
 
 messagesManager.handleWebhook = function (req, res) {
     try {
-
-
         const trigger = req.body.trigger;
         console.log('webhook trigger: ', trigger);
         switch (trigger) {
@@ -32,6 +30,10 @@ messagesManager.handleWebhook = function (req, res) {
 
             case 'conversation:start':
                 messagesManager.handleConversationStart(req, res);
+                break;
+
+            case 'delivery:success':
+                messagesManager.myEmitter.emit('event', req);
                 break;
 
             default:
@@ -297,7 +299,24 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                 message: message
             }).then((response) => {
                     console.log('sendMessage by smooch - succeeded:\n');
-                    return resolve();
+                    console.log('123***response: ' + JSON.stringify(response));
+
+                    messagesManager.myEmitter.on('event', function(req) {
+
+                        console.log('123***req:' + JSON.stringify(req));
+                        // setImmediate(() => {
+                        //     console.log('this happens asynchronously');
+                        // });
+                        // function cb(){
+                        //     console.log('processed in next iteration',a,b);
+                        // }
+                        // process.nextTick(cb)
+                        // console.log('processed in first iteration',a,b);
+
+                        return resolve();//rachel
+                    });
+
+
                 },
                 (error) => {
                     console.log('sendMessage by smooch - failed:\n');
@@ -312,6 +331,12 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
     });
 };
 
+const EventEmitter = require('events');
+class MyEmitter extends EventEmitter {}
+//const myEmitter = new MyEmitter();
+
+
+messagesManager.myEmitter = new MyEmitter();
 
 messagesManager.createMessageText = function(text){
     let messageData = {
@@ -321,7 +346,7 @@ messagesManager.createMessageText = function(text){
     };
     return messageData;
 
-}
+};
 
 
 messagesManager.createMessageCards = function(actions){
