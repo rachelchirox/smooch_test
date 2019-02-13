@@ -64,6 +64,8 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
             userText = 'handle: ' + messages[0].mediaUrl;
+            userText = "handle: https://s3-us-west-2.amazonaws.com/membit-uploads/4459-a2d6-20f941526e96.jpeg";
+
             console.log('666');
         }
 
@@ -111,7 +113,6 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         }
 
         let body = {
-            type: 'message',
             organization: organizationId,
             sessionId: userId,
             language: language,
@@ -124,6 +125,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
              let dataObject = JSON.parse(data);
              console.log('response from ' + flow_manager_path + ' :' + JSON.stringify(dataObject));
             // messagesManager.handleResponseFromServer(dataObject, userId);
+
     }).catch(error => {
         let errorMessage = '';
         if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
@@ -135,39 +137,6 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         console.info(errorMessage);
     });
 };
-
-
-//old, good
-// messagesManager.sendRequestToServer = function (userId, res, language, userText, cardType='text', cardValue = null) {
-//
-//     let body = {
-//         type: 'message',
-//         organization : organizationId,
-//         sessionId : userId,
-//         language : language,
-//         text : userText,
-//         cardType : cardType,
-//         value: cardValue
-//     }
-//
-//     console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
-//
-//     requestToService.sendRequest(flow_manager_path, 'post', body).then(data => {
-//
-//         let dataObject = JSON.parse(data);
-//         messagesManager.handleResponseFromServer(dataObject, userId);
-//
-//     }).catch(error => {
-//         let errorMessage = '';
-//         if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
-//             errorMessage = "interfaceCommunicationError";
-//         }
-//         else {
-//             errorMessage = error.body;
-//         }
-//         console.info(errorMessage);
-//     });
-// };
 
 messagesManager.handleResponseFromServer = function(dataObject, userId) {
     console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
