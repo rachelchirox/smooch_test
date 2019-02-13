@@ -15,6 +15,8 @@ messagesManager.setSmoochCore = function (smoochCore){
     messagesManager.smoochCore = smoochCore;
 };
 
+messagesManager.myEmitter = new MyEmitter();
+
 messagesManager.handleWebhook = function (req, res) {
     try {
         const trigger = req.body.trigger;
@@ -33,6 +35,7 @@ messagesManager.handleWebhook = function (req, res) {
                 break;
 
             case 'delivery:success':
+                console.log('delivery:success:\n', JSON.stringify(req.body, null, 4));
                 messagesManager.myEmitter.emit('event', req);
                 break;
 
@@ -302,8 +305,10 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                     console.log('123***response: ' + JSON.stringify(response));
 
                     messagesManager.myEmitter.on('event', function(req) {
+                        let messageId = response.message._id;
 
                         console.log('123***req:' + JSON.stringify(req));
+                        console.log('messageId' + messageId);
                         // setImmediate(() => {
                         //     console.log('this happens asynchronously');
                         // });
@@ -336,7 +341,7 @@ class MyEmitter extends EventEmitter {}
 //const myEmitter = new MyEmitter();
 
 
-messagesManager.myEmitter = new MyEmitter();
+
 
 messagesManager.createMessageText = function(text){
     let messageData = {
