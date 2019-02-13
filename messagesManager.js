@@ -113,25 +113,19 @@ messagesManager.handlePostback = function(req, res) {
         }
 
     let body = {
-        type : 'message',
-        organization : organizationId,
-        sessionId : userId,
-        language : language,
-        text : userText,
-        cardType : cardType,
+        type: 'message',
+        organization: organizationId,
+        sessionId: userId,
+        language: language,
+        text: userText,
+        cardType: cardType,
         value: cardValue
-    }
+    };
     console.log('sendRequest to flow-manager -before:\n', JSON.stringify(body, null, 4));
-
-    //     //rachel
-    // requestToService.sendRequest(flow_manager_path + '/'+ actionName, 'post', body).then(data => {
-    //
-    //     let dataObject = JSON.parse(data);
-    //     messagesManager.handleResponseFromServer(dataObject, userId);
         requestToService.sendRequest(flow_manager_path , 'post', body).then(data => {
-
-            let dataObject = JSON.parse(data);
-            messagesManager.handleResponseFromServer(dataObject, userId);
+             let dataObject = JSON.parse(data);
+            console.log('reponse from ' + flow_manager_path + ' :' + JSON.stringify(dataObject));
+            // messagesManager.handleResponseFromServer(dataObject, userId);
     }).catch(error => {
         let errorMessage = '';
         if (!error || error.code === "ECONNRESET" || !error.body || error.statusCode === 520) {
@@ -178,49 +172,16 @@ messagesManager.handlePostback = function(req, res) {
 // };
 
 messagesManager.handleResponseFromServer = function(dataObject, userId) {
-    //let dataObject = JSON.parse(data);
     console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
 
     let platform = null;
     let foundItem = messagesManager.clientPlatformsToSessions.find(item => item.sessionId == userId);
-    if (!foundItem) {
-        console.log('problem: messagesManager.clientPlatformsToSessions not contains the sessionId ' + userId);
+    if (foundItem) {
+        platform = foundItem.clientPlatform;
     }
     else {
-        platform = foundItem.clientPlatform;
-        // if (foundItem.clientPlatform == "messenger") {//facebook
-        //     console.log('parse to facebook');
-        //     platform = 'messenger';
-        // }
+        console.log('problem: messagesManager.clientPlatformsToSessions not contains the sessionId ' + userId);
     }
-
-    // for (let action of dataObject.actions) {
-    //     if (action.type === 'addBotText') {
-    //         console.log('addBotText');
-    //         if (action.payload.chats.constructor === Array) {
-    //             console.log('Array');
-    //             let actions = [];
-    //             action.payload.chats.forEach(function (btn) {
-    //                 console.log('btn: ' + JSON.stringify(btn, null, 4));
-    //                 actions.push({
-    //                     text: btn.str,
-    //                     type: 'postback',
-    //                     payload: btn.value + '_',
-    //                     metadata: {cardType: btn.type, cardValue: btn.value}
-    //                 });
-    //             });
-    //             //btn.value
-    //             console.log('actions: ' + actions);
-    //             let messageData = messagesManager.createMessageCards(actions);
-    //             messagesManager.sendMessageToClient(userId, messageData, res);
-    //         }
-    //         else {
-    //             let messageData = messagesManager.createMessageText(action.payload.chats.str, action.payload.chats.type);
-    //             messagesManager.sendMessageToClient(userId, messageData, res);
-    //         }
-    //     }
-    // }
-
 
     let messageData = null;
     if (dataObject.actions && dataObject.actions.length) {
