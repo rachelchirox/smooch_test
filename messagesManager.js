@@ -38,10 +38,10 @@ messagesManager.handleWebhook = function (req, res) {
                 messagesManager.handleConversationStart(req, res);
                 break;
 
-            case 'delivery:success':
-                console.log('delivery:success:\n', JSON.stringify(req.body, null, 4));
-                messagesManager.myEmitter.emit('event', req);
-                break;
+            // case 'delivery:success':
+            //     console.log('delivery:success:\n', JSON.stringify(req.body, null, 4));
+            //     messagesManager.myEmitter.emit('event', req);
+            //     break;
 
             default:
                 console.log('Ignoring unknown webhook trigger:', trigger);
