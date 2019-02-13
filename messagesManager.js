@@ -64,7 +64,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
             userText = 'handle: ' + messages[0].mediaUrl;
-            userText = "handle: https://s3-us-west-2.amazonaws.com/membit-uploads/4459-a2d6-20f941526e96.jpeg";
+            //userText = "handle: https://s3-us-west-2.amazonaws.com/membit-uploads/4459-a2d6-20f941526e96.jpeg";
 
             console.log('666');
         }
