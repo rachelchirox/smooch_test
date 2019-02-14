@@ -322,18 +322,20 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                     messagesManager.myEmitter.on('event', function(req) {
                         let messageId = response.message._id;
                         console.log('messageId' + messageId);
-                        console.log('123***req:' + JSON.stringify(req.body));
+                        //console.log('123***req:' + JSON.stringify(req.body));
+                        console.log('123***');
                         if (req.body.messages[0]._id == messageId) {
-
+                            console.log('456***');
 
                             messagesManager.smoochCore.appUsers.deleteMessage({
                                 appId: appId,
                                 userId: userId,
                                 messageId: messageId
                             }).then(() => {
-                                // async code
+                                console.log('deleteMessage success ***');
                             });
 
+                            console.log('deleteMessage sent***');
                             return resolve();//rachel
                         }
                     });
