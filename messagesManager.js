@@ -43,6 +43,11 @@ messagesManager.handleWebhook = function (req, res) {
             //     messagesManager.myEmitter.emit('event', req);
             //     break;
 
+                case 'message:appMaker':
+                    console.log('message:appMaker:\n', JSON.stringify(req.body, null, 4));
+                    messagesManager.myEmitter.emit('event', req);
+                    break;
+
             default:
                 console.log('Ignoring unknown webhook trigger:', trigger);
                 console.log('details:\n', JSON.stringify(req.body, null, 4));
@@ -310,19 +315,21 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
 
                     messagesManager.myEmitter.on('event', function(req) {
                         let messageId = response.message._id;
-
-                        console.log('123***req:' + JSON.stringify(req));
                         console.log('messageId' + messageId);
-                        // setImmediate(() => {
-                        //     console.log('this happens asynchronously');
-                        // });
-                        // function cb(){
-                        //     console.log('processed in next iteration',a,b);
-                        // }
-                        // process.nextTick(cb)
-                        // console.log('processed in first iteration',a,b);
+                        if (req.messages[0]._id == messageId) {
+                            console.log('123***req:' + JSON.stringify(req));
 
-                        return resolve();//rachel
+                            // setImmediate(() => {
+                            //     console.log('this happens asynchronously');
+                            // });
+                            // function cb(){
+                            //     console.log('processed in next iteration',a,b);
+                            // }
+                            // process.nextTick(cb)
+                            // console.log('processed in first iteration',a,b);
+
+                            return resolve();//rachel
+                        }
                     });
 
 
