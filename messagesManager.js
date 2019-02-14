@@ -326,14 +326,13 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                         if (req.body.messages[0]._id == messageId) {
 
 
-                            // setImmediate(() => {
-                            //     console.log('this happens asynchronously');
-                            // });
-                            // function cb(){
-                            //     console.log('processed in next iteration',a,b);
-                            // }
-                            // process.nextTick(cb)
-                            // console.log('processed in first iteration',a,b);
+                            messagesManager.smoochCore.appUsers.deleteMessage({
+                                appId: appId,
+                                userId: userId,
+                                messageId: messageId
+                            }).then(() => {
+                                // async code
+                            });
 
                             return resolve();//rachel
                         }
