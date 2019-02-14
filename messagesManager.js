@@ -75,6 +75,8 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             return res.end();
         }
 
+        let clientPlatform = messages[0].source.type;
+
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
             userText = 'handle: ' + messages[0].mediaUrl;
@@ -84,7 +86,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         }
 
         console.log('4***');
-        messagesManager.sendRequestToServer('sendMessageToFlow', req, userText);
+        messagesManager.sendRequestToServer('sendMessageToFlow', clientPlatform, req, userText);
     };
 
     messagesManager.handlePostback = function(req, res) {
@@ -97,16 +99,18 @@ messagesManager.handleMessagesFromClient = function(req, res) {
 
          let cardType = postback.action.metadata.cardType ? postback.action.metadata.cardType : 'text';
          let cardValue = postback.action.metadata.cardValue ? postback.action.metadata.cardValue : null;
-         messagesManager.sendRequestToServer('sendMessageToFlow', req, postback.action.text, cardType, cardValue);
+         let clientPlatform = postback.source.type;
+         messagesManager.sendRequestToServer('sendMessageToFlow', req, clientPlatform, postback.action.text, cardType, cardValue);
      };
 
     messagesManager.handleConversationStart = function(req, res) {
         console.log('handleConversationStart:\n', JSON.stringify(req.body, null, 4));
 
-        messagesManager.sendRequestToServer('initSession', req, '')
+        let clientPlatform = req.body.source.type;
+        messagesManager.sendRequestToServer('initSession', req, clientPlatform, '')
     };
 
-    messagesManager.sendRequestToServer = function (actionName, req, userText, cardType='text', cardValue = null) {
+    messagesManager.sendRequestToServer = function (actionName, req, clientPlatform, userText, cardType='text', cardValue = null) {
 
         console.log('sendRequest to flow-manager -before:\n', JSON.stringify(req.body, null, 4));
 
@@ -118,7 +122,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
             language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : defaultLanguage;
         }
 
-        let clientPlatform = req.body.appUser.clients && req.body.appUser.clients[0].platform;
+        // let clientPlatform = req.body.appUser.clients && req.body.appUser.clients[0].platform;
 
         //TODO: not good enough for multi clients to the same user
         let foundItem = messagesManager.clientPlatformsToSessions.find(item => item.sessionId == userId);
