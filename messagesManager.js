@@ -24,7 +24,8 @@ messagesManager.myEmitter = new MyEmitter();
 messagesManager.handleWebhook = function (req, res) {
     try {
         const trigger = req.body.trigger;
-        console.log('webhook trigger: ', trigger);
+        console.log('*** messagesManager.handleWebhook occured ***');
+        console.log('trigger: ', trigger);
         switch (trigger) {
             case 'message:appUser':
                 messagesManager.handleMessagesFromClient(req, res);
@@ -45,7 +46,7 @@ messagesManager.handleWebhook = function (req, res) {
 
                 case 'message:appMaker':
                     console.log('message:appMaker:\n', JSON.stringify(req.body, null, 4));
-                    messagesManager.myEmitter.emit('event', req);
+                    messagesManager.myEmitter.emit('event', req, trigger);
                     break;
 
             default:
@@ -64,6 +65,7 @@ messagesManager.handleWebhook = function (req, res) {
 };
 
 messagesManager.handleMessagesFromClient = function(req, res) {
+        console.log('*** messagesManager.handleMessagesFromClient start ***');
         const messages = req.body.messages.reduce((prev, current) => {
             if (current.role === 'appUser') {
                 prev.push(current);
@@ -80,17 +82,15 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         let userText = messages[0].text;
         if (messages[0].type == 'image'){
             userText = 'handle: ' + messages[0].mediaUrl;
-            //userText = "handle: https://s3-us-west-2.amazonaws.com/membit-uploads/4459-a2d6-20f941526e96.jpeg";
-
-            console.log('666');
+            console.log('received message with image');
         }
 
-        console.log('4***');
         messagesManager.sendRequestToServer('sendMessageToFlow', req, clientPlatform, userText);
     };
 
     messagesManager.handlePostback = function(req, res) {
-         console.log('handlePostback:\n', JSON.stringify(req.body, null, 4));
+         console.log('*** messagesManager.handlePostback start ***');
+         console.log('req.body:\n', JSON.stringify(req.body, null, 4));
 
          const postback = req.body.postbacks[0];
          if (!postback || !postback.action) {
@@ -104,15 +104,16 @@ messagesManager.handleMessagesFromClient = function(req, res) {
      };
 
     messagesManager.handleConversationStart = function(req, res) {
-        console.log('handleConversationStart:\n', JSON.stringify(req.body, null, 4));
+        console.log('*** messagesManager.handleConversationStart start ***');
+        console.log('req.body:\n', JSON.stringify(req.body, null, 4));
 
         let clientPlatform = req.body.source.type;
         messagesManager.sendRequestToServer('initSession', req, clientPlatform, '')
     };
 
     messagesManager.sendRequestToServer = function (actionName, req, clientPlatform, userText, cardType='text', cardValue = null) {
-
-        console.log('sendRequest to flow-manager -before:\n', JSON.stringify(req.body, null, 4));
+        console.log('*** messagesManager.sendRequestToServer start ***');
+        console.log('req.body:\n', JSON.stringify(req.body, null, 4));
 
         const userId = req.body.appUser.userId || req.body.appUser._id;
 
@@ -121,8 +122,6 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         if (!language) {
             language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : defaultLanguage;
         }
-
-        // let clientPlatform = req.body.appUser.clients && req.body.appUser.clients[0].platform;
 
         //TODO: not good enough for multi clients to the same user
         let foundItem = messagesManager.clientPlatformsToSessions.find(item => item.sessionId == userId);
@@ -157,7 +156,8 @@ messagesManager.handleMessagesFromClient = function(req, res) {
 };
 
 messagesManager.handleResponseFromServer = function(dataObject, userId) {
-    console.log('data.actions: ' + JSON.stringify(dataObject, null, 4));
+    console.log('*** messagesManager.handleResponseFromServer start ***');
+    console.log('data.actions:\n ' + JSON.stringify(dataObject, null, 4));
 
     let platform = null;
     let foundItem = messagesManager.clientPlatformsToSessions.find(item => item.sessionId == userId);
@@ -198,14 +198,11 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
 };
 
 messagesManager.createMessageData = function(action) {
-    console.log('createMessageData');
+    console.log('*** messagesManager.createMessageData start ***');
     let messageData = null;
 
     if (action.type === 'addBotText') {
-        console.log('addBotText');
-
         if (action.payload.chats.constructor === Array) {
-            console.log('Array');
             let items = [];
             let actions = [];
             action.payload.chats.forEach(function (btn) {
@@ -254,7 +251,6 @@ messagesManager.createMessageData = function(action) {
                 // });
             });
 
-            console.log('actions: ' + actions);
             messageData = messagesManager.createMessageCards(actions);
         }
         else {
@@ -265,14 +261,11 @@ messagesManager.createMessageData = function(action) {
 }
 
 messagesManager.createMessageData_Facebook = function(action) {
-    console.log('createMessageData_Facebook');
+    console.log('*** messagesManager.createMessageData_Facebook start ***');
     let messageData = null;
 
     if (action.type === 'addBotText') {
-        console.log('addBotText');
-
-        if (action.payload.chats.constructor === Array) {
-            console.log('Array');
+         if (action.payload.chats.constructor === Array) {
             let items = [];
             let actions = [];
             action.payload.chats.forEach(function (btn) {
@@ -287,8 +280,6 @@ messagesManager.createMessageData_Facebook = function(action) {
                         metadata: {cardType: btn.type, cardValue: btn.value}
                     }]
                 });
-
-
             });
 
             console.log('actions: ' + actions);
@@ -308,6 +299,7 @@ messagesManager.createMessageData_Facebook = function(action) {
 };
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
+    console.log('*** messagesManager.sendMessageToClient start ***');
     return new Promise((resolve, reject) => {
         try {
             console.log('message: ' + JSON.stringify(message, null, 4));
@@ -317,25 +309,21 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                 message: message
             }).then((response) => {
                     console.log('sendMessage by smooch - succeeded:\n');
-                    console.log('123***response: ' + JSON.stringify(response));
+                    console.log('response from sendMessage: ' + JSON.stringify(response));
 
-                    messagesManager.myEmitter.on('event', function(req) {
+                    messagesManager.myEmitter.on('event', function(req, trigger) {
                         let messageId = response.message._id;
-                        console.log('messageId' + messageId);
-                        //console.log('123***req:' + JSON.stringify(req.body));
-                        console.log('123***');
                         if (req.body.messages[0]._id == messageId) {
-                            console.log('456***');
-
-                            messagesManager.smoochCore.appUsers.deleteMessage({
-                                appId: appId,
-                                userId: userId,
-                                messageId: messageId
-                            }).then(() => {
-                                console.log('deleteMessage success ***');
-                            });
-
-                            console.log('deleteMessage sent***');
+                            console.log('messageId: ' + messageId);
+                            // messagesManager.smoochCore.appUsers.deleteMessage({
+                            //     appId: appId,
+                            //     userId: userId,
+                            //     messageId: messageId
+                            // }).then(() => {
+                            //     console.log('deleteMessage success ***');
+                            // });
+                            //
+                            // console.log('deleteMessage sent***');
                             return resolve();//rachel
                         }
                     });
@@ -343,13 +331,13 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
 
                 },
                 (error) => {
-                    console.log('sendMessage by smooch - failed:\n');
+                    console.log('messagesManager.sendMessageToClient - failed:\n');
                     console.log(JSON.stringify(error, null, 4));
                     return reject(error);
                 });
         }
         catch (err) {
-            console.log('EXCEPTION - Failed finished httpServiceLocator - send function,\nerror:' + JSON.stringify(err));
+            console.log('EXCEPTION - Failed on messagesManager.sendMessageToClient function,\nerror:' + JSON.stringify(err));
             return reject(err);
         }
     });
