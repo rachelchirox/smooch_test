@@ -194,6 +194,7 @@ messagesManager.handleResponseFromServer = function(dataObject, userId) {
 };
 
 messagesManager.createMessageData = function(action) {
+    console.log('createMessageData');
     let messageData = null;
 
     if (action.type === 'addBotText') {
@@ -260,6 +261,7 @@ messagesManager.createMessageData = function(action) {
 }
 
 messagesManager.createMessageData_Facebook = function(action) {
+    console.log('createMessageData_Facebook');
     let messageData = null;
 
     if (action.type === 'addBotText') {
