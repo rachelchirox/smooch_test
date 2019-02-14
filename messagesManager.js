@@ -316,7 +316,7 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                     messagesManager.myEmitter.on('event', function(req) {
                         let messageId = response.message._id;
                         console.log('messageId' + messageId);
-                        console.log('123***req:' + JSON.stringify(req));
+                        console.log('123***req:' + JSON.stringify(req.body));
                         if (req.body.messages[0]._id == messageId) {
 
 
