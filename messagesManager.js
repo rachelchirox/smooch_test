@@ -316,7 +316,7 @@ messagesManager.sendMessageToClient= function(userId, message, res) {
                     messagesManager.myEmitter.on('event', function(req) {
                         let messageId = response.message._id;
                         console.log('messageId' + messageId);
-                        if (req.messages[0]._id == messageId) {
+                        if (req.body.messages[0]._id == messageId) {
                             console.log('123***req:' + JSON.stringify(req));
 
                             // setImmediate(() => {
