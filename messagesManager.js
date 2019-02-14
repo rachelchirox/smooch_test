@@ -86,7 +86,7 @@ messagesManager.handleMessagesFromClient = function(req, res) {
         }
 
         console.log('4***');
-        messagesManager.sendRequestToServer('sendMessageToFlow', clientPlatform, req, userText);
+        messagesManager.sendRequestToServer('sendMessageToFlow', req, clientPlatform, userText);
     };
 
     messagesManager.handlePostback = function(req, res) {
