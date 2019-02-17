@@ -80,11 +80,11 @@
         FB.api('/me', function(response) {
             console.log('Successful login for: ' + response.name);
             document.getElementById('status').innerHTML  = document.getElementById('status').innerHTML + ' ' +
-                    'Thanks for logging in, ' + response.name + '!';
+                    'Thanks for logging in, ' + response.name + ' id: ' + response.id + '!';
 
             FB.api(
                    // '/' + response.id + '/accounts',
-                    '/' + '122' + '/accounts',
+                    '/' + '122' + '/accounts1',
                     'GET',
                     {},
                     function(response) {
