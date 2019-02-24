@@ -5,7 +5,7 @@ const messagesManager = require('./messagesManager');
 const requestToService = require('./requestToService');
 
 let exteranl_service_path = "http://messenger-manager.us-west-2.elasticbeanstalk.com/response/sendMessageToClient";
-
+exteranl_service_path = 'http://messenger-manager.membitbot.com/messenger-manager/response';
 router.route('/sendMessageToClient')
     .post(function (req, res) {
         console.log('sendMessageToClient body: ' + JSON.stringify(req.body, null, 4));
