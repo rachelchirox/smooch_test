@@ -17,8 +17,7 @@ router.route('/sendMessageToClient')
         requestToService.sendRequest(exteranl_service_path , 'post', body).then(data => {
             let dataObject = JSON.parse(data);
             console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
-            // messagesManager.handleResponseFromServer(dataObject, userId);
-
+        });
         res.json('ok');
     });
 
