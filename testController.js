@@ -12,7 +12,7 @@ router.route('/sendMessageToClient')
         let userId = req.body.sessionId;
         //let clientType = req.body.clientType;//not supposed to send to this layer, remove it later.
         let dataObject = req.body.content;
-        messagesManager.handleResponseFromServer(dataObject, userId);
+        //messagesManager.handleResponseFromServer(dataObject, userId);
 
         requestToService.sendRequest(exteranl_service_path , 'post', body).then(data => {
             let dataObject = JSON.parse(data);
