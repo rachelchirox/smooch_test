@@ -26,7 +26,7 @@ router.route('/sendMessageToClient')
                 console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
             });
             console.log('Blah blah blah blah extra-blah');
-        }, 1000);
+        }, 3000);
 
 
         res.json('ok');
