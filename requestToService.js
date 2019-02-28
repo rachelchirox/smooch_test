@@ -12,6 +12,7 @@ let requestToService = {
                 let current = requestToService.myQueue[0];
                 requestToService.sendRequest(current.url, current.method, current.body).then(data => {
                     console.log('Blah blah blah blah extra-blah');
+
                     requestToService.myQueue = requestToService.myQueue.slice(1, requestToService.myQueue.length);
                 });
             }
@@ -64,5 +65,5 @@ let requestToService = {
         })
     }
 };
-
+requestToService.initTimer();
 module.exports = requestToService;
