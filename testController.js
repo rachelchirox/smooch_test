@@ -14,19 +14,19 @@ router.route('/sendMessageToClient')
         let dataObject = req.body.content;
         //messagesManager.handleResponseFromServer(dataObject, userId);
 
-        // requestToService.sendRequest(exteranl_service_path , 'post', req.body).then(data => {
-        //     let dataObject = JSON.parse(data);
-        //     console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
-        // });
+        requestToService.sendWrapper(exteranl_service_path , 'post', req.body).then(data => {
+            let dataObject = JSON.parse(data);
+            console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
+        });
 
 
-        setTimeout(function() {
-            requestToService.sendRequest(exteranl_service_path , 'post', req.body).then(data => {
-                let dataObject = JSON.parse(data);
-                console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
-            });
-            console.log('Blah blah blah blah extra-blah');
-        }, 3000);
+        // setTimeout(function() {
+        //     requestToService.sendRequest(exteranl_service_path , 'post', req.body).then(data => {
+        //         let dataObject = JSON.parse(data);
+        //         console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
+        //     });
+        //     console.log('Blah blah blah blah extra-blah');
+        // }, 3000);
 
 
         res.json('ok');
