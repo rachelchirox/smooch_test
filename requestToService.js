@@ -3,24 +3,47 @@ const httpServiceLocator = require('./httpServiceLocator');
 
 let requestToService = {
 
+    myQueue :[],
 
-    isInProcess : false,
+    initTimer:function() {
+        setInterval(function () {
+            if (requestToService.myQueue.length > 0 && !requestToService.myQueue[0].notHandeld) {
+                requestToService.myQueue[0].notHandeld = true;
+                let current = requestToService.myQueue[0];
+                requestToService.sendRequest(current.url, current.method, current.body).then(data => {
+                    console.log('Blah blah blah blah extra-blah');
+                    requestToService.myQueue = requestToService.myQueue.slice(1, requestToService.myQueue.length);
+                });
+            }
+        }, 200);
+    },
+
+    // sendWrapper : function(url, method, body = {}) {
+    //     requestToService.myQueue.push({url:url, method:method, body:body});
+    //
+    //     console.log('sendWrapper isInProcess ' + requestToService.isInProcess);
+    //     let time = 0;
+    //     if (requestToService.isInProcess){
+    //         time = 2000;
+    //     }
+    //     setTimeout(function() {
+    //         requestToService.isInProcess = true;
+    //         requestToService.sendRequest(url, method, body).then(data => {
+    //             console.log('Blah blah blah blah extra-blah');
+    //         });
+    //     }, time);
+    // },
 
     sendWrapper : function(url, method, body = {}) {
 
-        let time = 0;
-        if (requestToService.isInProcess){
-            time = 2000;
-        }
-        setTimeout(function() {
-            requestToService.sendRequest(url, method, body);
-            console.log('Blah blah blah blah extra-blah');
-        }, time);
+        requestToService.myQueue.push({url:url, method:method, body:body});
+
+        console.log('requestToService.myQueue.push');
+
     },
 
     sendRequest: function (url, method, body = {}) {
         return new Promise((resolve, reject) => {
-            requestToService.isInProcess = true;
             console.log('url: ' + url);
             console.log('method: ' + method);
             console.log('body: ' + JSON.stringify(body));
@@ -28,17 +51,14 @@ let requestToService = {
                 (response) => {
                     console.log('111*');
                     console.log('response: ' + JSON.stringify(response), 'yellow');
-                    requestToService.isInProcess = false;
                     resolve(response);
                 },
                 (error) => {
                     console.log('222*');
                     console.error(error);
-                    requestToService.isInProcess = false;
                     reject(error);
                 }).catch((ex) => {
                 console.log('333*');
-                requestToService.isInProcess = false;
                 reject(ex);
             })
         })
