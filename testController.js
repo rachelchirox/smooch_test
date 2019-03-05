@@ -17,8 +17,9 @@ router.route('/sendMessageToClient')
 
         //requestToService.sendWrapper(exteranl_service_path , 'post', req.body);
         requestToService.sendRequest(exteranl_service_path , 'post', req.body).then(data => {
-                    let dataObject = JSON.parse(data);
-                    console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
+            console.log('response from ' + exteranl_service_path );
+                    // let dataObject = JSON.parse(data);
+                    // console.log('response from ' + exteranl_service_path + ' :' + JSON.stringify(dataObject));
                 });
 
 
