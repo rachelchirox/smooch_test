@@ -75,13 +75,13 @@
 
     // Here we run a very simple test of the Graph API after login is
     // successful.  See statusChangeCallback() for when this call is made.
-    function testAPI(accessToken) {
+    function testAPI(userAccessToken) {
 
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
             console.log('Successful login for: ' + response.name);
             document.getElementById('status').innerHTML  = document.getElementById('status').innerHTML + ' ' +
-                    'Thanks for logging in, ' + response.name + ' id: ' + response.id + '!' + 'accessToken ' + accessToken;
+                    'Thanks for logging in, ' + response.name + ' id: ' + response.id + '!' + 'userAccessToken ' + userAccessToken;
 
             FB.api(
                     '/' + response.id + '/accounts',
@@ -110,6 +110,9 @@
             //         }
             // );
             );
+
+            //https://graph.facebook.com/v2.6/321710101760718/subscribed_apps?access_token=EAADYo58YYc8BAPGABDhnaqz0cv9qs1i5k6D6iMKj2HJdYUmj2RS4eAKck9q6tEfDxmZBiLBFW4uhdzaxWgzZBXS8FkbSabKEoXbDZC60aOADzyZBwc5v2ZA0vdUowpkmrLoSHAHNtc3WBa1x6ZCWPjuA7z1d55OsLmdbZCaZAC7t4GBguih7dUs3Ci8tPe9H7MWLANM8uZAqgzgZDZD
+
         });
 
 
@@ -130,7 +133,7 @@
   the FB.login() function when clicked.
 -->
 
-<fb:login-button scope="public_profile,email, manage_pages, pages_show_list, pages_messaging, pages_messaging_subscriptions" onlogin="checkLoginState();">
+<fb:login-button scope="public_profile,email, pages_messaging_subscriptions, manage_pages, pages_show_list, pages_messaging" onlogin="checkLoginState();">
 </fb:login-button>
 <!--
 publish_pages
