@@ -84,6 +84,8 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
+
+
     // Here we run a very simple test of the Graph API after login is
     // successful.  See statusChangeCallback() for when this call is made.
     function testAPI(userAccessToken) {
@@ -98,11 +100,29 @@
                     '/' + response.id + '/accounts',
                     'GET',
                     {},
-                    function(response2) {
-                        document.getElementById('status').innerHTML = document.getElementById('status').innerHTML + ' ' +
-                                JSON.stringify(response2);
-                        // Insert your code here
+                    // function(response2) {
+                    //     document.getElementById('status').innerHTML = document.getElementById('status').innerHTML + ' ' +
+                    //             JSON.stringify(response2);
+                    //     // Insert your code here
+                    // }
+                    function(response) {
+                        console.log('Successfully retrieved pages', response);
+                        var pages = response.data;
+                        var ul = document.getElementById('list');
+                        for (var i = 0, len = pages.length; i < len; i++) {
+                            var page = pages[i];
+                            var li = document.createElement('li');
+                            var a = document.createElement('a');
+                            a.href = "#";
+                            //a.onclick = subscribeApp.bind(this, page.id, page.access_token);
+                            a.innerHTML = page.name;
+                            li.appendChild(a);
+                            ul.appendChild(li);
+                        }
                     }
+
+
+
 //token rachel page :
                     //EAADYo58YYc8BAEBELFNuZAeZCoyZB0hK3FOqizcZBO9XfDKDZBNQq2MnZAWJdomwo5AaZCpmP4y3eh7NiqQkDZBqNaCrFcaHsFOk19blKH1OE3pdLE9ZBnjRBskra7u9JPPzFiZCc1gvqPvOZBLL4YAZAxpC06gAnwEut3g6XZAhZBRmBadcIBfj8DUV4GHXnFRUe6nz5BEzuOCHqBBJ95YL8Ymjg1kZBZB5EqnfnUYZD
                     //id:
@@ -151,7 +171,7 @@
         data-show-faces="true">
 </div>
 
-<fb:login-button scope="public_profile,email, manage_pages, pages_show_list, publish_pages, pages_manage_cta, pages_manage_instant_articles" onlogin="checkLoginState();">
+<fb:login-button scope="public_profile,email, manage_pages, pages_show_list, publish_pages" onlogin="checkLoginState();">
 </fb:login-button>
 
 <!--
@@ -163,7 +183,8 @@ publish_pages
 
 <div id="status">
 </div>
-
+<div id="list">
+</div>
 </body>
 </html>
 
