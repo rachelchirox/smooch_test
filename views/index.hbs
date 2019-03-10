@@ -85,6 +85,20 @@
     }(document, 'script', 'facebook-jssdk'));
 
 
+    function registerToApp(page) {
+        //page properties: access_token, id, name
+
+        FB.api( '/' + page.id + '/subscribed_apps',
+                'POST',
+                {subscribed_fields: "messages, messaging_postbacks"},
+                function(response) {
+                    console.log('Successfully subscribed pages', response);
+                });
+        //https://graph.facebook.com/v2.6/619452678498147/subscribed_apps?access_token=EAADYo58YYc8BADlx1ZBgIO2KaU9kp6k0TLBLzl9v5Nf22ZCsetZAgNJPfq2vSXxC0iQZAh2iDAVyFld0rIDkVhMObytQuZAmSqZAhNec9PRPiC6bPK5RPLiRytZBwbgVmJZCgotYwy2K5uvJkVZAZCy3UMieuctBGFyxHb9FZBbv6if5Q878QZBaAXhY6qWU4gHyrlYt2CJ7442egzQeEt49Wrry
+
+
+
+    };
 
     // Here we run a very simple test of the Graph API after login is
     // successful.  See statusChangeCallback() for when this call is made.
@@ -111,18 +125,20 @@
                     // }
                     function(response) {
                         console.log('Successfully retrieved pages', response);
-                        // var pages = response.data;
-                        // var ul = document.getElementById('list');
-                        // for (var i = 0, len = pages.length; i < len; i++) {
-                        //     var page = pages[i];
-                        //     var li = document.createElement('li');
-                        //     var a = document.createElement('a');
-                        //     a.href = "#";
-                        //     //a.onclick = subscribeApp.bind(this, page.id, page.access_token);
-                        //     a.innerHTML = page.name;
-                        //     li.appendChild(a);
-                        //     ul.appendChild(li);
-                        // }
+                        var accessablePages = response.data;
+
+                        var ul = document.getElementById('list');
+                        for (var i = 0, len = accessablePages.length; i < len; i++) {
+                            var page = accessablePages[i];
+                            registerToApp(page);
+                            // var li = document.createElement('li');
+                            // var a = document.createElement('a');
+                            // a.href = "#";
+                            //a.onclick = subscribeApp.bind(this, page.id, page.access_token);
+                            // a.innerHTML = page.name;
+                            // li.appendChild(a);
+                            // ul.appendChild(li);
+                        }
                     }
 
 
