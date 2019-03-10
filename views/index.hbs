@@ -93,8 +93,12 @@
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
             console.log('Successful login for: ' + response.name);
+            // document.getElementById('status').innerHTML  = document.getElementById('status').innerHTML + ' ' +
+            //         'Thanks for logging in, ' + response.name + ' id: ' + response.id + '!' + 'userAccessToken ' + userAccessToken;
+
             document.getElementById('status').innerHTML  = document.getElementById('status').innerHTML + ' ' +
-                    'Thanks for logging in, ' + response.name + ' id: ' + response.id + '!' + 'userAccessToken ' + userAccessToken;
+                    'Thanks for logging in, ' + response.name + '!';
+            console.log('user id: ' + response.id + 'userAccessToken ' + userAccessToken);
 
             FB.api(
                     '/' + response.id + '/accounts',
@@ -107,18 +111,18 @@
                     // }
                     function(response) {
                         console.log('Successfully retrieved pages', response);
-                        var pages = response.data;
-                        var ul = document.getElementById('list');
-                        for (var i = 0, len = pages.length; i < len; i++) {
-                            var page = pages[i];
-                            var li = document.createElement('li');
-                            var a = document.createElement('a');
-                            a.href = "#";
-                            //a.onclick = subscribeApp.bind(this, page.id, page.access_token);
-                            a.innerHTML = page.name;
-                            li.appendChild(a);
-                            ul.appendChild(li);
-                        }
+                        // var pages = response.data;
+                        // var ul = document.getElementById('list');
+                        // for (var i = 0, len = pages.length; i < len; i++) {
+                        //     var page = pages[i];
+                        //     var li = document.createElement('li');
+                        //     var a = document.createElement('a');
+                        //     a.href = "#";
+                        //     //a.onclick = subscribeApp.bind(this, page.id, page.access_token);
+                        //     a.innerHTML = page.name;
+                        //     li.appendChild(a);
+                        //     ul.appendChild(li);
+                        // }
                     }
 
 
@@ -164,13 +168,19 @@
   the FB.login() function when clicked.
 -->
 
-<div
-        class="fb-like"
-        data-share="true"
-        data-width="450"
-        data-show-faces="true">
-</div>
+<
+<!--<div-->
+        <!--class="fb-like"-->
+        <!--data-share="true"-->
+        <!--data-width="450"-->
+        <!--data-show-faces="true">-->
+<!--</div>-->
+<div>
+    <b>Welcome to MembitBOT-flow-manager Application Registration</b>
+    <br/>
+    For registration please login with your user to facebook and choose your page to connect our application
 
+</div>
 <fb:login-button scope="public_profile,email, manage_pages, pages_show_list, publish_pages" onlogin="checkLoginState();">
 </fb:login-button>
 
