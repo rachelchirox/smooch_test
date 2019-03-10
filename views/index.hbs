@@ -88,7 +88,7 @@
     function registerToApp(page) {
         //page properties: access_token, id, name
 
-        FB.api( '/' + page.id + '/subscribed_apps',
+        FB.api( '/' + page.id + '/subscribed_apps?access_token=' + page.access_token,
                 'POST',
                 {subscribed_fields: "messages, messaging_postbacks"},
                 function(response) {
