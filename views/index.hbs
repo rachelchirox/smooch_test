@@ -152,9 +152,9 @@
                     //             JSON.stringify(response2);
                     //     // Insert your code here
                     // }
-                    function(response) {
-                        console.log('Successfully retrieved pages', response);
-                        var accessablePages = response.data;
+                    function(responseAccounts) {
+                        console.log('Successfully retrieved pages', responseAccounts);
+                        var accessablePages = responseAccounts.data;
 //short token!!!!!
 
                         var ul = document.getElementById('list');
