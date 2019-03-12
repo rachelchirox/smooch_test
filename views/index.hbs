@@ -90,6 +90,7 @@
     function registerToApp(page, userId) {
         //page properties: access_token, id, name
 
+        //short token!!!!!
         FB.api( '/' + page.id + '/subscribed_apps?access_token=' + page.access_token,
                 'POST',
                 {subscribed_fields: "messages, messaging_postbacks"},
@@ -100,24 +101,20 @@
                         console.log('really success!!')
                     }
                 });
-        //https://graph.facebook.com/v2.6/619452678498147/subscribed_apps?access_token=EAADYo58YYc8BADlx1ZBgIO2KaU9kp6k0TLBLzl9v5Nf22ZCsetZAgNJPfq2vSXxC0iQZAh2iDAVyFld0rIDkVhMObytQuZAmSqZAhNec9PRPiC6bPK5RPLiRytZBwbgVmJZCgotYwy2K5uvJkVZAZCy3UMieuctBGFyxHb9FZBbv6if5Q878QZBaAXhY6qWU4gHyrlYt2CJ7442egzQeEt49Wrry
-
 
         FB.api('/oauth/access_token?grant_type=fb_exchange_token&client_id=' + appId + '&client_secret=' + appSecret + '&fb_exchange_token=' + page.access_token,
                 'POST',
                 {},
                 function(oauthResponse) {
+                    console.log('Successfully oauth', oauthResponse);
+                    //long token!!!!!
+                    console.log('long token:' + oauthResponse.access_token);
 
-                //again accounts for getting never-expired, and can check it by
+                    //again accounts for getting never-expired, and can check it by
                     FB.api(
                             '/' + userId + '/accounts',
                             'GET',
                             {},
-                            // function(response2) {
-                            //     document.getElementById('status').innerHTML = document.getElementById('status').innerHTML + ' ' +
-                            //             JSON.stringify(response2);
-                            //     // Insert your code here
-                            // }
                             function(accountsResponse) {
                                 console.log('Successfully retrieved pages 2', accountsResponse);
 
@@ -127,7 +124,7 @@
                     // GET /debug_token?
                     //         input_token={input-token}&
                     //         access_token={access-token}
-                    console.log('Successfully oauth', oauthResponse);
+
                 });
 
     };
@@ -158,11 +155,12 @@
                     function(response) {
                         console.log('Successfully retrieved pages', response);
                         var accessablePages = response.data;
+//short token!!!!!
 
                         var ul = document.getElementById('list');
                         for (var i = 0, len = accessablePages.length; i < len; i++) {
                             var page = accessablePages[i];
-                            registerToApp(page);
+                            registerToApp(page, response.id);
                             // var li = document.createElement('li');
                             // var a = document.createElement('a');
                             // a.href = "#";
