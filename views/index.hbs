@@ -121,14 +121,31 @@
                                 console.log('Successfully retrieved pages 2', accountsResponse);
                                 console.log('never expired token: ' + accountsResponse.data[0].access_token);
 
-                                FB.api('/debug_token?access_token=238197260444111|pdLIFlCajRcfh6xwyID0HlZSUMw&input_token=' + accountsResponse.data[0].access_token,
+                                //to get app access_token:
+                                //https://graph.facebook.com/oauth/access_token?client_id=238197260444111&client_secret=68c6d4a5d7bb588a2d87f0589706ef19&grant_type=client_credentials
+
+                                FB.api('/oauth/access_token?client_id=' + appId + '&client_secret=' +  appSecret + '&grant_type=client_credentials',
                                         'GET',
                                         {},
-                                        function(debug_tokenResponse) {
-                                            console.log('Successfully debug_token', debug_tokenResponse);
+                                        function(getAppTokenResponse) {
+                                             console.log('Successfully get app access token', getAppTokenResponse);
+                                             let appAccessToken = getAppTokenResponse.access_token.access_token;
 
-                                        }
+                                            FB.api('/debug_token?access_token=' + appAccessToken + '&input_token=' + accountsResponse.data[0].access_token,
+                                                    'GET',
+                                                    {},
+                                                    function(debug_tokenResponse) {
+                                                        console.log('Successfully debug_token', debug_tokenResponse);
+                                                        if (debug_tokenResponse.data.expires_at == 0){
+                                                            console.log('Successfully to changed to Never expired');
+                                                        }
+                                                    }
+                                            );
+                                            }
                                 );
+
+
+
 
 
                             }
