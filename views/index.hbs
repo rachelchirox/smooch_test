@@ -87,14 +87,14 @@
     }(document, 'script', 'facebook-jssdk'));
 
 
-    function registerToApp(page) {
+    function registerToApp(page, userId) {
         //page properties: access_token, id, name
 
         FB.api( '/' + page.id + '/subscribed_apps?access_token=' + page.access_token,
                 'POST',
                 {subscribed_fields: "messages, messaging_postbacks"},
-                function(response) {
-                    console.log('Successfully subscribed pages', response);
+                function(subscribed_appsResponse) {
+                    console.log('Successfully subscribed pages', subscribed_appsResponse);
                 });
         //https://graph.facebook.com/v2.6/619452678498147/subscribed_apps?access_token=EAADYo58YYc8BADlx1ZBgIO2KaU9kp6k0TLBLzl9v5Nf22ZCsetZAgNJPfq2vSXxC0iQZAh2iDAVyFld0rIDkVhMObytQuZAmSqZAhNec9PRPiC6bPK5RPLiRytZBwbgVmJZCgotYwy2K5uvJkVZAZCy3UMieuctBGFyxHb9FZBbv6if5Q878QZBaAXhY6qWU4gHyrlYt2CJ7442egzQeEt49Wrry
 
@@ -102,7 +102,27 @@
         FB.api('/oauth/access_token?grant_type=fb_exchange_token&client_id=' + appId + '&client_secret=' + appSecret + '&fb_exchange_token=' + page.access_token,
                 'POST',
                 {},
-                function(response) {
+                function(oauthResponse) {
+
+                //again accounts for getting never-expired, and can check it by
+                    FB.api(
+                            '/' + userId + '/accounts',
+                            'GET',
+                            {},
+                            // function(response2) {
+                            //     document.getElementById('status').innerHTML = document.getElementById('status').innerHTML + ' ' +
+                            //             JSON.stringify(response2);
+                            //     // Insert your code here
+                            // }
+                            function(accountsResponse) {
+                                console.log('Successfully retrieved pages', accountsResponse);
+
+                            }
+                    );
+
+                    // GET /debug_token?
+                    //         input_token={input-token}&
+                    //         access_token={access-token}
                     console.log('Successfully oauth', response);
                 });
 
