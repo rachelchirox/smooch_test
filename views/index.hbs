@@ -108,11 +108,12 @@
                 function(oauthResponse) {
                     console.log('Successfully oauth', oauthResponse);
                     //long token!!!!!
-                    console.log('long token:' + oauthResponse.access_token);
-                    console.log('userId'+ userId);
+                    console.log('long token: ' + oauthResponse.access_token);
+
                     //again accounts for getting never-expired, and can check it by
-                    FB.api(
-                            '/' + userId + '/accounts',
+
+                    //oauthResponse.access_token
+                    FB.api('/' + userId + '/accounts?access_token=' + oauthResponse.access_token,
                             'GET',
                             {},
                             function(accountsResponse) {
