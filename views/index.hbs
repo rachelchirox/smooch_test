@@ -12,6 +12,7 @@
 <script>
     var appId = '238197260444111';
     var appSecret='68c6d4a5d7bb588a2d87f0589706ef19';
+    var appAccessToken='';
     // This is called with the results from from FB.getLoginStatus().
     function statusChangeCallback(response) {
         console.log('statusChangeCallback');
@@ -120,7 +121,7 @@
                                 console.log('Successfully retrieved pages 2', accountsResponse);
                                 console.log('never expired token: ' + accountsResponse.data[0].access_token);
 
-                                FB.api('/debug_token?input_token=' + accountsResponse.data[0].access_token,
+                                FB.api('/debug_token?access_token=238197260444111|pdLIFlCajRcfh6xwyID0HlZSUMw&input_token=' + accountsResponse.data[0].access_token,
                                         'GET',
                                         {},
                                         function(debug_tokenResponse) {
