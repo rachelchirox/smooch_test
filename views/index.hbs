@@ -129,7 +129,7 @@
                                         {},
                                         function(getAppTokenResponse) {
                                              console.log('Successfully get app access token', getAppTokenResponse);
-                                             let appAccessToken = getAppTokenResponse.access_token.access_token;
+                                             let appAccessToken = getAppTokenResponse.access_token;
 
                                             FB.api('/debug_token?access_token=' + appAccessToken + '&input_token=' + accountsResponse.data[0].access_token,
                                                     'GET',
