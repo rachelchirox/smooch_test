@@ -118,6 +118,17 @@
                             {},
                             function(accountsResponse) {
                                 console.log('Successfully retrieved pages 2', accountsResponse);
+                                console.log('never expired token: ' + accountsResponse.data[0].access_token);
+
+                                FB.api('/debug_token?input_token=' + accountsResponse.data[0].access_token,
+                                        'GET',
+                                        {},
+                                        function(debug_tokenResponse) {
+                                            console.log('Successfully debug_token', debug_tokenResponse);
+
+                                        }
+                                );
+
 
                             }
                     );
