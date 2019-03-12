@@ -94,7 +94,11 @@
                 'POST',
                 {subscribed_fields: "messages, messaging_postbacks"},
                 function(subscribed_appsResponse) {
+
                     console.log('Successfully subscribed pages', subscribed_appsResponse);
+                    if (subscribed_appsResponse.success){
+                        console.log('really success!!')
+                    }
                 });
         //https://graph.facebook.com/v2.6/619452678498147/subscribed_apps?access_token=EAADYo58YYc8BADlx1ZBgIO2KaU9kp6k0TLBLzl9v5Nf22ZCsetZAgNJPfq2vSXxC0iQZAh2iDAVyFld0rIDkVhMObytQuZAmSqZAhNec9PRPiC6bPK5RPLiRytZBwbgVmJZCgotYwy2K5uvJkVZAZCy3UMieuctBGFyxHb9FZBbv6if5Q878QZBaAXhY6qWU4gHyrlYt2CJ7442egzQeEt49Wrry
 
@@ -115,7 +119,7 @@
                             //     // Insert your code here
                             // }
                             function(accountsResponse) {
-                                console.log('Successfully retrieved pages', accountsResponse);
+                                console.log('Successfully retrieved pages 2', accountsResponse);
 
                             }
                     );
@@ -123,7 +127,7 @@
                     // GET /debug_token?
                     //         input_token={input-token}&
                     //         access_token={access-token}
-                    console.log('Successfully oauth', response);
+                    console.log('Successfully oauth', oauthResponse);
                 });
 
     };
