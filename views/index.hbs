@@ -92,9 +92,9 @@
         //page properties: access_token, id, name
 
         //short token!!!!!
-        FB.api( '/' + page.id + '/subscribed_apps?access_token=' + page.access_token,
+        FB.api( '/' + page.id + '/subscribed_apps' ,
                 'POST',
-                {subscribed_fields: "messages, messaging_postbacks"},
+                {subscribed_fields: "messages, messaging_postbacks", access_token:page.access_token},
                 function(subscribed_appsResponse) {
 
                     console.log('Successfully subscribed pages', subscribed_appsResponse);
@@ -103,6 +103,17 @@
                     }
                 });
 
+        // FB.api( '/' + page.id + '/subscribed_apps?access_token=' + page.access_token,
+        //         'POST',
+        //         {subscribed_fields: "messages, messaging_postbacks"},
+        //         function(subscribed_appsResponse) {
+        //
+        //             console.log('Successfully subscribed pages', subscribed_appsResponse);
+        //             if (subscribed_appsResponse.success){
+        //                 console.log('really success!!')
+        //             }
+        //         });
+        //
         FB.api('/oauth/access_token?grant_type=fb_exchange_token&client_id=' + appId + '&client_secret=' + appSecret + '&fb_exchange_token=' + page.access_token,
                 'POST',
                 {},
