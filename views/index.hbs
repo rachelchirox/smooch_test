@@ -144,7 +144,7 @@
 
                                             FB.api( '/' + page.id + '/subscribed_apps' ,
                                                     'POST',
-                                                    { access_token:accountsResponse.data[0].access_token},
+                                                    { subscribed_fields: '', access_token:accountsResponse.data[0].access_token},
                                                     //subscribed_fields: "messages, messaging_postbacks",
                                                     function(subscribed_appsResponse) {
 
