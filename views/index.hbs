@@ -92,16 +92,16 @@
         //page properties: access_token, id, name
 
         //short token!!!!!
-        FB.api( '/' + page.id + '/subscribed_apps' ,
-                'POST',
-                {subscribed_fields: "messages, messaging_postbacks", access_token:page.access_token},
-                function(subscribed_appsResponse) {
-
-                    console.log('Successfully subscribed pages', subscribed_appsResponse);
-                    if (subscribed_appsResponse.success){
-                        console.log('really success!!')
-                    }
-                });
+        // FB.api( '/' + page.id + '/subscribed_apps' ,
+        //         'POST',
+        //         {subscribed_fields: "messages, messaging_postbacks", access_token:page.access_token},
+        //         function(subscribed_appsResponse) {
+        //
+        //             console.log('Successfully subscribed pages', subscribed_appsResponse);
+        //             if (subscribed_appsResponse.success){
+        //                 console.log('really success!!')
+        //             }
+        //         });
 
         // FB.api( '/' + page.id + '/subscribed_apps?access_token=' + page.access_token,
         //         'POST',
@@ -141,6 +141,17 @@
                                         function(getAppTokenResponse) {
                                              console.log('Successfully get app access token', getAppTokenResponse);
                                              let appAccessToken = getAppTokenResponse.access_token;
+
+                                            FB.api( '/' + page.id + '/subscribed_apps' ,
+                                                    'POST',
+                                                    {subscribed_fields: "messages, messaging_postbacks", access_token:accountsResponse.data[0].access_token},
+                                                    function(subscribed_appsResponse) {
+
+                                                        console.log('Successfully subscribed pages', subscribed_appsResponse);
+                                                        if (subscribed_appsResponse.success){
+                                                            console.log('really success!!')
+                                                        }
+                                                    });
 
                                             FB.api('/debug_token?access_token=' + appAccessToken + '&input_token=' + accountsResponse.data[0].access_token,
                                                     'GET',
