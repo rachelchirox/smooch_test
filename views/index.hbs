@@ -277,7 +277,7 @@
 <div>
     <h1 style="color: #5e9ca0;"><span style="color: #003366;">Welcome to</span><strong> MembitBOT-flow-manager <span style="color: #003366;">Application Registration!</span></strong></h1>
     <p><span style="color: #003366;">For registration please login with your user to facebook and choose your page to connect our application.</span></p>
-    <fb:login-button scope="public_profile,email, pages_show_list, pages_messaging_subscriptions, pages_messaging" onlogin="checkLoginState();">
+    <fb:login-button scope="public_profile, email, pages_show_list, pages_messaging_subscriptions, pages_messaging, manage_pages" onlogin="checkLoginState();">
     </fb:login-button>
     <!--publish_pages-->
     <div id="status" style="color: #003366;">
@@ -287,8 +287,6 @@
     <!--public_profile - email - manage_pages - pages_show_list - pages_messaging_subscriptions - pages_messaging-->
 </div>
 
-<!--manage_pages-->
-<!--
 
 pages_show_list -- shows pages in the popup for checking them
 pages_messaging_subscriptions, pages_messaging -- for receiving messages to webhook, and for see the integration details in page settings
