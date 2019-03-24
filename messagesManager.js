@@ -32,16 +32,16 @@ messagesManager.handleWebhook = function (req, res) {
 
         switch (trigger) {
             case 'message:appUser':
-                messagesManager.handleMessagesFromClient(req, res);
-                //for test only
-                let messageData = {
-                    role: 'appMaker',
-                    type: 'text',
-                    text: 'test only'
-                };
-                messagesManager.sendMessageToClient('905939d0c6e420b000ac969f', messageData).then((response) => {
-
-                });
+                // messagesManager.handleMessagesFromClient(req, res);
+                // //for test only
+                // let messageData = {
+                //     role: 'appMaker',
+                //     type: 'text',
+                //     text: 'test only'
+                // };
+                // messagesManager.sendMessageToClient('905939d0c6e420b000ac969f', messageData).then((response) => {
+                //
+                // });
 
                 console.log('before integrations: ');
                 console.log('messagesManager.smoochCore: ' + JSON.stringify(messagesManager.smoochCore));
