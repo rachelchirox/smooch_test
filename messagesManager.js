@@ -26,6 +26,18 @@ messagesManager.handleWebhook = function (req, res) {
         const trigger = req.body.trigger;
         console.log('*** messagesManager.handleWebhook occured ***');
         console.log('trigger: ', trigger);
+
+        //for test only
+        let messageData = {
+            role: 'appMaker',
+            type: 'text',
+            text: 'test only'
+        };
+        messagesManager.sendMessageToClient('905939d0c6e420b000ac969f', messageData).then((response) => {
+
+        });
+
+
         switch (trigger) {
             case 'message:appUser':
                 messagesManager.handleMessagesFromClient(req, res);
