@@ -10,7 +10,7 @@
 </head>
 <body>
 <script>
-    var appId = '238197260444111';
+    var appId = '238197260444111'; //membitbot-flow-manager app id
     var appSecret='68c6d4a5d7bb588a2d87f0589706ef19';
     var appAccessToken='';
     // This is called with the results from from FB.getLoginStatus().
@@ -153,6 +153,7 @@
                                                             console.log('really success!!')
                                                         }
                                                     });
+
 
                                             FB.api('/debug_token?access_token=' + appAccessToken + '&input_token=' + accountsResponse.data[0].access_token,
                                                     'GET',

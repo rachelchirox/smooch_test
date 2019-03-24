@@ -6,8 +6,8 @@
   "repository": "https://github.com/smooch/smooch-bot-example",
   "logo": "https://node-js-sample.herokuapp.com/node.png",
   "env": {
-    "SMOOCH_APP_TOKEN": "5c6007ce383ee5002262e55d",
-    "SMOOCH_KEY_ID": "app_5c4d91c9c74c040023423c98",
-    "SMOOCH_SECRET": "yALmS9bSdH9IZf5Hw4TArSTt54k_IqXKrivTraNxbZQPagGoKrhqq5hCpAPY-Md8OXpMnUhB8EzHXEG0blzoBw"
+    "SMOOCH_APP_TOKEN": "5c9741745e53740010af989f",
+    "SMOOCH_KEY_ID": "app_5c974689941fc00011fc1fa3",
+    "SMOOCH_SECRET": "REzKIDmk0M5q9E29nhVgY1Bt3ks0ssysEgN7iwX_NyaK7p-mwWZYVgr2c5bNfU6SwI4KL8wG6LsRaqI2uZCFEA"
   }
 }
