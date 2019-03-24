@@ -43,9 +43,13 @@ messagesManager.handleWebhook = function (req, res) {
 
                 });
 
-
+                console.log('before integrations: ');
                 messagesManager.smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
-                    console.log('integrations: ' + JSON.stringify(response));
+                    console.log('integrations_response: ' + JSON.stringify(response));
+                    res.json(response);
+                }, (error)=>
+                {
+                    console.log('integrations_error: ' + JSON.stringify(error));
                     res.json(response);
                 });
 
