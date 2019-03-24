@@ -44,14 +44,21 @@ messagesManager.handleWebhook = function (req, res) {
                 });
 
                 console.log('before integrations: ');
-                messagesManager.smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
-                    console.log('integrations_response: ' + JSON.stringify(response));
-                    res.json(response);
-                }, (error)=>
-                {
-                    console.log('integrations_error: ' + JSON.stringify(error));
-                    res.json(response);
-                });
+                console.log('messagesManager.smoochCore: ' + JSON.stringify(messagesManager.smoochCore));
+                console.log('messagesManager.smoochCore.integrations: ' + JSON.stringify(messagesManager.smoochCore.integrations));
+
+                try {
+                    messagesManager.smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
+                        console.log('integrations_response: ' + JSON.stringify(response));
+                        res.json(response);
+                    }, (error) => {
+                        console.log('integrations_error: ' + JSON.stringify(error));
+                        res.json(response);
+                    });
+                }
+                catch (e) {
+                    console.log('integrations_catch: ' + JSON.stringify(e));
+                }
 
                 break;
 
