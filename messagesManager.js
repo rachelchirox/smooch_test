@@ -27,20 +27,28 @@ messagesManager.handleWebhook = function (req, res) {
         console.log('*** messagesManager.handleWebhook occured ***');
         console.log('trigger: ', trigger);
 
-        //for test only
-        let messageData = {
-            role: 'appMaker',
-            type: 'text',
-            text: 'test only'
-        };
-        messagesManager.sendMessageToClient('905939d0c6e420b000ac969f', messageData).then((response) => {
 
-        });
 
 
         switch (trigger) {
             case 'message:appUser':
                 messagesManager.handleMessagesFromClient(req, res);
+                //for test only
+                let messageData = {
+                    role: 'appMaker',
+                    type: 'text',
+                    text: 'test only'
+                };
+                messagesManager.sendMessageToClient('905939d0c6e420b000ac969f', messageData).then((response) => {
+
+                });
+
+
+                messagesManager.smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
+                    console.log('integrations: ' + JSON.stringify(response));
+                    res.json(response);
+                });
+
                 break;
 
             case 'postback':

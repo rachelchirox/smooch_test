@@ -4,52 +4,59 @@ const config = require('config'),
     flow_manager_path = config.get('flow_manager_path'),
     appId = config.get('appId');
 
-const smoochBot = require('smooch-bot');
-const MemoryLock = smoochBot.MemoryLock;
-const SmoochApiStore = smoochBot.SmoochApiStore;
-const SmoochApiBot = smoochBot.SmoochApiBot;
-const StateMachine = smoochBot.StateMachine;
-const app = require('../app');
-const script = require('../script');
-const SmoochCore = require('smooch-core');
-const jwt = require('../jwt');
-const requestToService = require('../requestToService');
+// const smoochBot = require('smooch-bot');
+//const MemoryLock = smoochBot.MemoryLock;
+//const SmoochApiStore = smoochBot.SmoochApiStore;
+// const SmoochApiBot = smoochBot.SmoochApiBot;
+// const StateMachine = smoochBot.StateMachine;
+// const script = require('../script');
+
+    const app = require('../app');
+
+    const SmoochCore = require('smooch-core');
+
+    const jwt = require('../jwt');
+
+
+    console.log('errorrrrrrr')
+
+//const requestToService = require('../requestToService');
 const messagesManager = require('../messagesManager');
 //const appId = '5c6007ce383ee5002262e55d';
-const name = 'SmoochBot';
-const avatarUrl = 'https://s.gravatar.com/avatar/f91b04087e0125153623a3778e819c0a?s=80';
-const store = new SmoochApiStore({
-    jwt
-});
-const lock = new MemoryLock();
-const webhookTriggers = ['message:appUser', 'postback'];
-
-function createWebhook(smoochCore, target) {
-    return smoochCore.webhooks.create({
-        target,
-        triggers: webhookTriggers
-    })
-        .then((res) => {
-            console.log('Smooch webhook created with target', res.webhook.target);
-        })
-        .catch((err) => {
-            console.error('Error creating Smooch webhook:', err);
-            console.error(err.stack);
-        });
-}
-
-function updateWebhook(smoochCore, existingWebhook) {
-    return smoochCore.webhooks.update(existingWebhook._id, {
-        triggers: webhookTriggers
-    })
-        .then((res) => {
-            console.log('Smooch webhook updated with missing triggers', res.webhook.target);
-        })
-        .catch((err) => {
-            console.error('Error updating Smooch webhook:', err);
-            console.error(err.stack);
-        });
-}
+// const name = 'SmoochBot';
+// const avatarUrl = 'https://s.gravatar.com/avatar/f91b04087e0125153623a3778e819c0a?s=80';
+// const store = new SmoochApiStore({
+//     jwt
+// });
+// const lock = new MemoryLock();
+// const webhookTriggers = ['message:appUser', 'postback'];
+//
+// function createWebhook(smoochCore, target) {
+//     return smoochCore.webhooks.create({
+//         target,
+//         triggers: webhookTriggers
+//     })
+//         .then((res) => {
+//             console.log('Smooch webhook created with target', res.webhook.target);
+//         })
+//         .catch((err) => {
+//             console.error('Error creating Smooch webhook:', err);
+//             console.error(err.stack);
+//         });
+// }
+//
+// function updateWebhook(smoochCore, existingWebhook) {
+//     return smoochCore.webhooks.update(existingWebhook._id, {
+//         triggers: webhookTriggers
+//     })
+//         .then((res) => {
+//             console.log('Smooch webhook updated with missing triggers', res.webhook.target);
+//         })
+//         .catch((err) => {
+//             console.error('Error updating Smooch webhook:', err);
+//             console.error(err.stack);
+//         });
+// }
 
 
 
@@ -63,20 +70,41 @@ function updateWebhook(smoochCore, existingWebhook) {
 //     // async code
 // });
 
-const userId = 'bc30d7230657c83bebb6d5fa';
+// const userId = 'bc30d7230657c83bebb6d5fa';
 const smoochCore = new SmoochCore({
         jwt: jwt,
     });
 
-messagesManager.setSmoochCore(smoochCore);
+console.log('new smooch')
 
-app.post('/testSmooch', function(req, res, next) {
+try {
+    messagesManager.setSmoochCore(smoochCore);
+    console.log('setSmoochCore')
+
+}catch (e) {
+    console.log('err:'+e);
+
+}
+
+
+
+app.get('/testSmooch', function(req, res, next) {
 
     console.log('testSmooch');
-    smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
-        console.log(JSON.stringify(response));
-        res.json(response);
-    });
+    console.log(smoochCore.integrations);
+    let messageData = {
+        role: 'appMaker',
+        type: 'text',
+        text: 'test only2'
+    };
+    // messagesManager.sendMessageToClient('905939d0c6e420b000ac969f', messageData).then((response) => {
+    //     console.log('sendMessageToClient: ' + JSON.stringify(response));
+    // });
+
+    // smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
+    //     console.log(JSON.stringify(response));
+    //     res.json(response);
+    // });
 });
 
 //works!
@@ -88,31 +116,10 @@ app.post('/webhook', function(req, res, next) {
     // let currentOrganizationId = req.query.organizationId;
     // let currentLanguage = req.query.language;
     messagesManager.handleWebhook(req, res);
-    // const trigger = req.body.trigger;
-    // //console.log('webhook.trigger:\n', JSON.stringify(trigger, null, 4));
-    // switch (trigger) {
-    //     case 'message:appUser':
-    //         //console.log('webhook.message:appUser' + );
-    //         console.log('webhook.message:appUser:\n', JSON.stringify(req.body, null, 4));
-    //         //handleMessages2(req, res);
-    //         handleMessages_byFM(req, res);
-    //
-    //         //handleMessages(req, res);
-    //         break;
-    //
-    //     case 'postback':
-    //         console.log('webhook.postback');
-    //         handlePostback(req, res);
-    //         break;
-    //
-    //     default:
-    //         console.log('Ignoring unknown webhook trigger:', trigger);
-    //         console.log('details:\n', JSON.stringify(req.body, null, 4));
-    //         res.end();
-    // }
+
 });
 
-var server = app.listen(process.env.PORT || 8000, function() {
+var server = app.listen(process.env.PORT || 2000, function() {
     var host = server.address().address;
     var port = server.address().port;
 
@@ -247,65 +254,65 @@ var server = app.listen(process.env.PORT || 8000, function() {
 // });
 //}
 
-function createBot(appUser) {
-    const userId = appUser.userId || appUser._id;
-    return new SmoochApiBot({
-        name,
-        avatarUrl,
-        lock,
-        store,
-        userId
-    });
-}
+// function createBot(appUser) {
+//     const userId = appUser.userId || appUser._id;
+//     return new SmoochApiBot({
+//         name,
+//         avatarUrl,
+//         lock,
+//         store,
+//         userId
+//     });
+// }
 
 //messages that received from client
-function handleMessages2(req, res) {
-    const messages = req.body.messages.reduce((prev, current) => {
-        if (current.role === 'appUser') {
-            prev.push(current);
-        }
-        return prev;
-    }, []);
-
-    if (messages.length === 0) {
-        return res.end();
-    }
-
-    const userId = req.body.appUser.userId || req.body.appUser._id;
-
-    // const language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
-    // sendRequest(userId, res, language, messages[0].text)
-
-
-    smoochCore.appUsers.sendMessage({
-        appId: appId,
-        userId: userId,
-        message: {
-            text: 'reply to: ' + messages[0].text + ' {userId: ' + userId + '}',
-            role: 'appMaker',
-            type: 'text'
-        }
-    }).then((response) => {
-            res.end();
-            // async code
-        },
-        (error)=>{
-
-        });
-
-    // const stateMachine = new StateMachine({
-    //     script,
-    //     bot: createBot(req.body.appUser)
-    // });
-    //
-    // stateMachine.receiveMessage(messages[0])
-    //     .then(() => res.end())
-    //     .catch((err) => {
-    //         console.error('SmoochBot error:', err);
-    //         console.error(err.stack);
-    //         res.end();
-    //     });
-}
+// function handleMessages2(req, res) {
+//     const messages = req.body.messages.reduce((prev, current) => {
+//         if (current.role === 'appUser') {
+//             prev.push(current);
+//         }
+//         return prev;
+//     }, []);
+//
+//     if (messages.length === 0) {
+//         return res.end();
+//     }
+//
+//     const userId = req.body.appUser.userId || req.body.appUser._id;
+//
+//     // const language = req.body.appUser.clients && req.body.appUser.clients[0].info.browserLanguage ? req.body.appUser.clients[0].info.browserLanguage : "he";
+//     // sendRequest(userId, res, language, messages[0].text)
+//
+//
+//     smoochCore.appUsers.sendMessage({
+//         appId: appId,
+//         userId: userId,
+//         message: {
+//             text: 'reply to: ' + messages[0].text + ' {userId: ' + userId + '}',
+//             role: 'appMaker',
+//             type: 'text'
+//         }
+//     }).then((response) => {
+//             res.end();
+//             // async code
+//         },
+//         (error)=>{
+//
+//         });
+//
+//     // const stateMachine = new StateMachine({
+//     //     script,
+//     //     bot: createBot(req.body.appUser)
+//     // });
+//     //
+//     // stateMachine.receiveMessage(messages[0])
+//     //     .then(() => res.end())
+//     //     .catch((err) => {
+//     //         console.error('SmoochBot error:', err);
+//     //         console.error(err.stack);
+//     //         res.end();
+//     //     });
+// }
 
 //messages that received from client
 // function handleMessages_byFM(req, res) {
@@ -579,35 +586,35 @@ function handleMessages2(req, res) {
 //     });
 // }
 
-function handleMessages(req, res) {
-    const messages = req.body.messages.reduce((prev, current) => {
-        if (current.role === 'appUser') {
-            prev.push(current);
-        }
-        return prev;
-    }, []);
-
-    if (messages.length === 0) {
-        return res.end();
-    }
-
-
-
-    const stateMachine = new StateMachine({
-        script,
-        bot: createBot(req.body.appUser)
-    });
-
-    stateMachine.receiveMessage(messages[0])
-        .then(() => res.end())
-        .catch((err) => {
-            console.error('SmoochBot error:', err);
-            console.error(err.stack);
-            res.end();
-        });
-
-
-}
+// function handleMessages(req, res) {
+//     const messages = req.body.messages.reduce((prev, current) => {
+//         if (current.role === 'appUser') {
+//             prev.push(current);
+//         }
+//         return prev;
+//     }, []);
+//
+//     if (messages.length === 0) {
+//         return res.end();
+//     }
+//
+//
+//
+//     const stateMachine = new StateMachine({
+//         script,
+//         bot: createBot(req.body.appUser)
+//     });
+//
+//     stateMachine.receiveMessage(messages[0])
+//         .then(() => res.end())
+//         .catch((err) => {
+//             console.error('SmoochBot error:', err);
+//             console.error(err.stack);
+//             res.end();
+//         });
+//
+//
+// }
 
 // function handlePostback(req, res) {
 //     console.log('handlePostback:\n', JSON.stringify(req.body, null, 4));
