@@ -1,5 +1,5 @@
 {
-  "flow_manager_path": "https://flow-manager.membitbot.com/flow-manager/postClient",
+  "flow_manager_path": "https://flow-manager-dev.membitbot.com/flow-manager/postClient",
   "appId":"5c9741745e53740010af989f",
   "kid": "app_5c974689941fc00011fc1fa3",
   "smoochSecret": "REzKIDmk0M5q9E29nhVgY1Bt3ks0ssysEgN7iwX_NyaK7p-mwWZYVgr2c5bNfU6SwI4KL8wG6LsRaqI2uZCFEA",

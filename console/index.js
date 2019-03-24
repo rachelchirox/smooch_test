@@ -11,8 +11,8 @@ const StateMachine = smoochBot.StateMachine;
 
 const jwt = require('jsonwebtoken');
 
-var token = jwt.sign({scope: 'app'}, 'yALmS9bSdH9IZf5Hw4TArSTt54k_IqXKrivTraNxbZQPagGoKrhqq5hCpAPY-Md8OXpMnUhB8EzHXEG0blzoBw', {header: {kid: 'app_5c4d91c9c74c040023423c98'}});
-console.log(token);
+// var token = jwt.sign({scope: 'app'}, 'yALmS9bSdH9IZf5Hw4TArSTt54k_IqXKrivTraNxbZQPagGoKrhqq5hCpAPY-Md8OXpMnUhB8EzHXEG0blzoBw', {header: {kid: 'app_5c4d91c9c74c040023423c98'}});
+// console.log(token);
 
 
 class ConsoleBot extends Bot {
