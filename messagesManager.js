@@ -300,7 +300,7 @@ messagesManager.createMessageData_Facebook = function(action) {
 
 messagesManager.sendMessageToClient= function(userId, message, res) {
     console.log('*** messagesManager.sendMessageToClient start ***');
-    return new Promise((resolve, reject) => {mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm               m   nnnnn
+    return new Promise((resolve, reject) => {
         try {
             console.log('message: ' + JSON.stringify(message, null, 4));
             messagesManager.smoochCore.appUsers.sendMessage({
