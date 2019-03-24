@@ -70,8 +70,20 @@ const smoochCore = new SmoochCore({
 
 messagesManager.setSmoochCore(smoochCore);
 
+app.post('/testSmooch', function(req, res, next) {
+
+
+    smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
+        console.log(JSON.stringify(response))
+    });
+},
+
 //works!
 app.post('/webhook', function(req, res, next) {
+
+
+
+
     // let currentOrganizationId = req.query.organizationId;
     // let currentLanguage = req.query.language;
     messagesManager.handleWebhook(req, res);
