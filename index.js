@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index_old', {
+    res.render('index', {
         appToken: "5c9741745e53740010af989f"
     });
 });

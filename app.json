@@ -1,13 +1,1 @@
-{
-  "name": "Smooch Bot Example App",
-  "description": "Smooch Bot example using Express",
-  "keywords": ["smooch", "bot", "express"],
-  "website": "https://smooch.io",
-  "repository": "https://github.com/smooch/smooch-bot-example",
-  "logo": "https://node-js-sample.herokuapp.com/node.png",
-  "env": {
-    "SMOOCH_APP_TOKEN": "5c9741745e53740010af989f",
-    "SMOOCH_KEY_ID": "app_5c974689941fc00011fc1fa3",
-    "SMOOCH_SECRET": "REzKIDmk0M5q9E29nhVgY1Bt3ks0ssysEgN7iwX_NyaK7p-mwWZYVgr2c5bNfU6SwI4KL8wG6LsRaqI2uZCFEA"
-  }
-}
+{}

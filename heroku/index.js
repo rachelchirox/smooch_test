@@ -91,7 +91,7 @@ try {
 app.get('/testSmooch', function(req, res, next) {
 
     console.log('testSmooch');
-    console.log(smoochCore.integrations);
+    // console.log(smoochCore.integrations);
     let messageData = {
         role: 'appMaker',
         type: 'text',
@@ -101,10 +101,10 @@ app.get('/testSmooch', function(req, res, next) {
     //     console.log('sendMessageToClient: ' + JSON.stringify(response));
     // });
 
-    // smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
-    //     console.log(JSON.stringify(response));
-    //     res.json(response);
-    // });
+    smoochCore.integrations.list({appId: '5c9741745e53740010af989f'}).then((response) => {
+        console.log(JSON.stringify(response));
+        res.json(response);
+    });
 });
 
 //works!
